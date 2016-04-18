@@ -1,0 +1,413 @@
+{% extends 'test/base.html' %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="section">
+      <div class="col-lg-12">
+        <div class="page-header">
+          <h1>Experiment summary for {{ projectInfomationName[1] }}</h1>
+        </div>
+      </div>
+
+        <div class="col-lg-12">
+          {{ projectInfomationName[0] }}
+          <div class="col-lg-12">
+            <div class="row">
+              <div class="col-lg-12">
+                <h2>Raw Data</h2>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Name</th>
+                      <th>Accession</th>
+                      <th>File Type</th>
+                      <th>Author</th>
+                      <th>Date</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for row in rawDatas %}
+                    <tr>
+                      <td>{{ row.id }}</td>
+                      <td>{{ row.name }}</td>
+                      <td>{{ row.location }}</td>
+                      <td>{{ row.file_type }}</td>
+                      <td>{{ row.author }}</td>
+                      <td>{{ row.date | timeformat('%Y-%m-%d %H:%M') }}</td>
+
+                    </tr>
+                  {% endfor %}
+                    <!--<tr>-->
+                      <!--<td>2</td>-->
+                      <!--<td contenteditable="true">-->
+                        <!--<a href="#">bbbbb</a>-->
+                      <!--</td>-->
+                      <!--<td>fastq</td>-->
+                      <!--<td>20 nt</td>-->
+                      <!--<td>single-ended</td>-->
+                      <!--<td>Michael's Lab</td>-->
+                      <!--<td>2016.2.21</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                      <!--<td>3</td>-->
+                      <!--<td contenteditable="true">-->
+                        <!--<a href="#">ccccc</a>-->
+                      <!--</td>-->
+                      <!--<td>fastq</td>-->
+                      <!--<td>30 nt</td>-->
+                      <!--<td>single-ended</td>-->
+                      <!--<td>Michael's Lab</td>-->
+                      <!--<td>2016.2.18</td>-->
+                    <!--</tr>-->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-12">
+                  <h2>Used By...</h2>
+                </div>
+              </div>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <!-- <th>Related Data</th> -->
+                    <th>Comments</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Mark</td>
+                    <!-- <td>
+                      <a>link</a>
+                    </td> -->
+                    <td>@mdo</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Jacob</td>
+                    <!-- <td>
+                      <a>link</a>
+                    </td> -->
+                    <td>@fat</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Larry</td>
+                    <!-- <td>
+                      <a>link</a>
+                    </td> -->
+                    <td>@twitter</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+
+                <h2>Search</h2>
+            <!-- <form> -->
+              <div class="form-group">
+                <label for="input-search" class="sr-only">Search Tree:</label>
+                <input type="input" class="form-control" id="input-search" placeholder="Type to search..." value="">
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" class="checkbox" id="chk-ignore-case" value="false">
+                  Ignore Case
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" class="checkbox" id="chk-exact-match" value="false">
+                  Exact Match
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" class="checkbox" id="chk-reveal-results" value="false">
+                  Reveal Results
+                </label>
+              </div>
+              <button type="button" class="btn btn-success" id="btn-search">Search</button>
+              <button type="button" class="btn btn-default" id="btn-clear-search">Clear</button>
+
+
+            </div>
+            <div class="col-md-6">
+            <h2>Tree</h2>
+              <div id="treeview-searchable" class="treeview"></div>
+
+
+
+            </div>
+          </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+
+
+        {% block extra_reference %}
+        <!--<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>-->
+    <!--<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>-->
+    <!--<link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">-->
+    <!--<link href="http://pingendo.github.io/pingendo-bootstrap/themes/default/bootstrap.css" rel="stylesheet" type="text/css">-->
+    <!--<link href="http://jonmiles.github.io/bootstrap-treeview/bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">-->
+
+
+        {% endblock %}
+
+        {% block scripts %}
+        <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/bootstrap-treeview.js"></script>
+    <script type="text/javascript">
+      var level_nameprefix_map = ['user: ','raw data: ','qc report: ','script: ','result: ']
+
+
+      function process(key,value) {
+        console.log(key + " : "+value);
+      }
+      function traverse(o,func,file_map,level) {
+//          console.log(level)
+        var childList = []
+        for (var i in o) {
+            var value = {};
+//            func.apply(this,[i,o[i]]);
+            value.text = i.toString();
+            value.text = level_nameprefix_map[level]
+
+            if(level==0){
+                //the author level
+                value.href = 'http://www.baidu.com'
+            }
+
+
+//            fileid = parseInt(i)
+//            console.log(file_map)
+//            console.log(parseInt(i))
+            else
+            {
+//                value.name = file_map[parseInt(i)][1];
+//                value.location = file_map[parseInt(i)][0];
+                value.href = '/file/' + i;
+                value.text += file_map[i][1];
+
+            }
+
+//files[i][0]   the location of file, whose id is i
+//files[i][1]   the name of file, whose id is i
+
+            if (o[i] !== null && typeof(o[i])=="object") {
+                //going on step down in the object tree!!
+                value.nodes = traverse(o[i],func,file_map,level+1);
+            }
+            childList.push(value)
+        }
+          return childList;
+      }
+      function generate_tree(data){
+        traverse(data,process);
+      }
+      $(function() {
+//            console.log("{{ files }}")
+          $.post('/exp/{{ projectid }}/getTree',
+
+                  function(data,status){
+                      console.log(data)
+
+
+                    json_data = JSON.parse(data);
+                      console.log(json_data)
+                    tree_structure = json_data['tree_structure']
+                    file_map = json_data['file_map']
+                    var defaultData =traverse(tree_structure,process,file_map,0);
+//                    var defaultData = generate_tree(json_data);
+//                      console.log(defaultData)
+
+                      $('#treeview1').treeview({
+                          data: defaultData,
+                          enableLinks: true,
+                          levels:99
+                        });
+
+
+
+
+
+                    var $searchableTree = $('#treeview-searchable').treeview({
+                      data: defaultData,
+                      enableLinks: true,
+                      levels:99
+                    });
+
+                    var search = function(e) {
+                      var pattern = $('#input-search').val();
+                      var options = {
+                        ignoreCase: $('#chk-ignore-case').is(':checked'),
+                        exactMatch: $('#chk-exact-match').is(':checked'),
+                        revealResults: $('#chk-reveal-results').is(':checked')
+                      };
+                      var results = $searchableTree.treeview('search', [ pattern, options ]);
+
+                      var output = '<p>' + results.length + ' matches found</p>';
+                      $.each(results, function (index, result) {
+                        output += '<p>- ' + result.text + '</p>';
+                      });
+                      $('#search-output').html(output);
+                    }
+
+                    $('#btn-search').on('click', search);
+                    $('#input-search').on('keyup', search);
+
+                    $('#btn-clear-search').on('click', function (e) {
+                      $searchableTree.treeview('clearSearch');
+                      $('#input-search').val('');
+                      $('#search-output').html('');
+                    });
+
+                          }
+                  );
+              }
+          );
+//            var defaultData = [
+//              {
+//                text: 'Nadhir',
+//                href: 'http://www.baidu.com',
+//                tags: ['4'],
+//                nodes: [
+//                  {
+//                    text: 'Raw Data 1',
+//                    href: '#child1',
+//                    tags: ['2'],
+//                    nodes: [
+//                      {
+//                        text: 'QC Report 1',
+//                        href: 'editor.html',
+//                        tags: ['0'],
+//                        nodes:[
+//                          {
+//                            text: 'Script 1',
+//                            href: 'editor.html',
+//                            nodes:[
+//                              {
+//                                text: 'result 1',
+//                                href: 'editor.html'
+//                              }
+//                            ]
+//
+//
+//                          },
+//                          {
+//                            text: 'Script 2',
+//                            nodes:[
+//                              {
+//                                text: 'result 2'
+//                              }
+//                            ]
+//
+//
+//                          }
+//                        ]
+//                      },
+//                      {
+//                        text: 'QC Report 2',
+//                        href: '#grandchild2',
+//                        tags: ['0']
+//                      }
+//                    ]
+//                  },
+//                  {
+//                    text: 'Raw Data 2',
+//                    href: '#child2',
+//                    tags: ['0']
+//                  }
+//                ]
+//              },
+//              {
+//                text: 'Long Chen',
+//                href: '#parent2',
+//                tags: ['0']
+//              },
+//              {
+//                text: 'Zhengyu Liang',
+//                href: '#parent3',
+//                 tags: ['0']
+//              },
+//              {
+//                text: 'Xiangyu Li',
+//                href: '#parent4',
+//                tags: ['0']
+//              },
+//              {
+//                text: 'Yang Chen',
+//                href: '#parent5'  ,
+//                tags: ['0']
+//              }
+//            ];
+//
+//
+//
+//            $('#treeview1').treeview({
+//              data: defaultData,
+//              enableLinks: true,
+//              levels:99
+//            });
+//
+//
+//
+//
+//
+//            var $searchableTree = $('#treeview-searchable').treeview({
+//              data: defaultData,
+//              enableLinks: true,
+//              levels:99
+//            });
+//
+//            var search = function(e) {
+//              var pattern = $('#input-search').val();
+//              var options = {
+//                ignoreCase: $('#chk-ignore-case').is(':checked'),
+//                exactMatch: $('#chk-exact-match').is(':checked'),
+//                revealResults: $('#chk-reveal-results').is(':checked')
+//              };
+//              var results = $searchableTree.treeview('search', [ pattern, options ]);
+//
+//              var output = '<p>' + results.length + ' matches found</p>';
+//              $.each(results, function (index, result) {
+//                output += '<p>- ' + result.text + '</p>';
+//              });
+//              $('#search-output').html(output);
+//            }
+//
+//            $('#btn-search').on('click', search);
+//            $('#input-search').on('keyup', search);
+//
+//            $('#btn-clear-search').on('click', function (e) {
+//              $searchableTree.treeview('clearSearch');
+//              $('#input-search').val('');
+//              $('#search-output').html('');
+//            });
+//          });
+    </script>
+    <script src="/static/js/my/generate_tree.js"></script>
+
+        {% endblock %}

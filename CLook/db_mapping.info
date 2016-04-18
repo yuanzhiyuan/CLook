@@ -1,0 +1,26 @@
+CLook.files
+files.project   :   link to projects.id
+file.type       :   {
+                        0:raw,
+                        1:qc report,
+                        2:script,
+                        3:result
+                    }
+file.author     :   link to user.id
+file.date       :   timestamp
+
+
+
+
+CLook.projects
+projects.category   :{
+                        0:RNA-seq,
+                        1:chip-seq,
+                        2:Hi-C,
+                        3:Chia-PET
+                    }
+projects.n_files    :   number of row data
+projects.start_date :   timestamp
+projects.update_date:   timestamp
+projects.manager    :   link to user.id
+

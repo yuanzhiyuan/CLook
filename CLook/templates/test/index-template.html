@@ -1,0 +1,366 @@
+{% extends 'test/base.html' %}
+
+{% block content %}
+
+          <!-- Page Heading -->
+          <div class="row">
+            <div class="col-lg-12">
+              <h1 class="page-header">Dashboard
+                <small>Statistics Overview</small>
+              </h1>
+              <ol class="breadcrumb">
+                <li class="active">
+                  <i class="fa fa-dashboard"></i>Dashboard</li>
+              </ol>
+            </div>
+          </div>
+          <!-- /.row -->
+          <!-- /.row -->
+          <div class="row">
+            <div class="col-lg-3 col-md-6">
+              <div class="panel panel-primary">
+                <div class="panel-heading">
+                  <div class="row">
+                    <div class="col-xs-3">
+                      <i class="fa fa-comments fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                      <div class="huge">{{ categoriedProjects[0] | count }}</div>
+                      <div>RNA-seq</div>
+                    </div>
+                  </div>
+                </div>
+                <a href="#">
+                                <div class="panel-footer">
+                                    <span class="pull-left" onclick="view_detail(this)" categoryid="0">View Details</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="panel panel-green">
+                <div class="panel-heading">
+                  <div class="row">
+                    <div class="col-xs-3">
+                      <i class="fa fa-tasks fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                      <div class="huge">{{ categoriedProjects[1] | count }}</div>
+                      <div>chip-seq</div>
+                    </div>
+                  </div>
+                </div>
+                <a href="#">
+                                <div class="panel-footer">
+                                    <span class="pull-left" onclick="view_detail(this)" categoryid="1">View Details</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="panel panel-yellow">
+                <div class="panel-heading">
+                  <div class="row">
+                    <div class="col-xs-3">
+                      <i class="fa fa-shopping-cart fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                      <div class="huge">{{ categoriedProjects[2] | count }}</div>
+                      <div>Hi-C</div>
+                    </div>
+                  </div>
+                </div>
+                <a href="#">
+                                <div class="panel-footer">
+                                    <span class="pull-left" onclick="view_detail(this)" categoryid="2">View Details</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="panel panel-red">
+                <div class="panel-heading">
+                  <div class="row">
+                    <div class="col-xs-3">
+                      <i class="fa fa-support fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                      <div class="huge">{{ categoriedProjects[3] | count }}</div>
+                      <div>Chia-PET</div>
+                    </div>
+                  </div>
+                </div>
+                <a href="#">
+                                <div class="panel-footer">
+                                    <span class="pull-left" onclick="view_detail(this)" categoryid="3">View Details</span>
+                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </a>
+              </div>
+            </div>
+          </div>
+          <!-- /.row -->
+          <div class="row" id="table_parent">
+            <div class="col-md-12" id="table0">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Species</th>
+                    <th>Cell Type</th>
+                    <th>Number of Files</th>
+                    <th>Start Date</th>
+                    <th>Update Date</th>
+                    <th>Manager</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 {% for row in categoriedProjects[0] %}
+                  <tr>
+                    <td>
+                      <a href="/exp">{{ row.id }}</a>
+                    </td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ category_map[row.category] }}</td>
+                    <td>{{ row.species }}</td>
+                    <td>{{ row.cell_type }}</td>
+                    <td>{{ row.n_files }}</td>
+                    <td>{{ row.start_date | timeformat('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ row.update_date | timeformat('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ row.manager }}</td>
+
+                  </tr>
+                {% endfor %}
+                  <tr>
+                    <!--<td>-->
+                      <!--<a href="/exp">2</a>-->
+                    <!--</td>-->
+                    <!--<td>RNA-seq</td>-->
+                    <!--<td>Jacob</td>-->
+                    <!--<td>Thornton</td>-->
+                    <!--<td>@fat</td>-->
+                    <!--<td>2016.1.1</td>-->
+                    <!--<td>Nadhir</td>-->
+                  <!--</tr>-->
+                  <!--<tr>-->
+                    <!--<td>-->
+                      <!--<a href="/exp">3</a>-->
+                    <!--</td>-->
+                    <!--<td>RNA-seq</td>-->
+                    <!--<td>Larry</td>-->
+                    <!--<td>the Bird</td>-->
+                    <!--<td>@twitter</td>-->
+                    <!--<td>2016.1.1</td>-->
+                    <!--<td>Nadhir</td>-->
+                  <!--</tr>-->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="col-md-12" id="table1">
+              <table class="table">
+                <thead>
+                  <tr><th>#</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Species</th>
+                    <th>Cell Type</th>
+                    <th>Number of Files</th>
+                    <th>Start Date</th>
+                    <th>Update Date</th>
+                    <th>Manager</th></tr>
+                </thead>
+                <tbody>
+                {% for row in categoriedProjects[1] %}
+                  <tr>
+                    <td>
+                      <a href="/exp/{{ row.id }}">{{ row.id }}</a>
+                    </td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ category_map[row.category] }}</td>
+                    <td>{{ row.species }}</td>
+                    <td>{{ row.cell_type }}</td>
+                    <td>{{ row.n_files }}</td>
+                    <td>{{ row.start_date | timeformat('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ row.update_date | timeformat('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ row.manager }}</td>
+
+                  </tr>
+                {% endfor %}
+                  <!--<tr>-->
+                    <!--<td>-->
+                      <!--<a href="/exp">2</a>-->
+                    <!--</td>-->
+                    <!--<td>chip-seq</td>-->
+                    <!--<td>Jacob</td>-->
+                    <!--<td>Thornton</td>-->
+                    <!--<td>@fat</td>-->
+                    <!--<td>2016.1.1</td>-->
+                    <!--<td>Long</td>-->
+                  <!--</tr>-->
+                  <!--<tr>-->
+                    <!--<td>-->
+                      <!--<a href="/exp">3</a>-->
+                    <!--</td>-->
+                    <!--<td>chip-seq</td>-->
+                    <!--<td>Larry</td>-->
+                    <!--<td>the Bird</td>-->
+                    <!--<td>@twitter</td>-->
+                    <!--<td>2016.1.1</td>-->
+                    <!--<td>Long</td>-->
+                  <!--</tr>-->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="col-md-12" id="table2">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Category</th>
+                    <th>Species</th>
+                    <th>Cell Type</th>
+                    <th>Number of Files</th>
+                    <th>Date</th>
+                    <th>Author</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 {% for row in categoriedProjects[2] %}
+                  <tr>
+                    <td>
+                      <a href="/exp">{{ row.id }}</a>
+                    </td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ category_map[row.category] }}</td>
+                    <td>{{ row.species }}</td>
+                    <td>{{ row.cell_type }}</td>
+                    <td>{{ row.n_files }}</td>
+                    <td>{{ row.start_date }}</td>
+                    <td>{{ row.update_date }}</td>
+                    <td>{{ row.manager }}</td>
+
+                  </tr>
+                {% endfor %}
+                  <!--<tr>-->
+                    <!--<td>-->
+                      <!--<a href="/exp">1</a>-->
+                    <!--</td>-->
+                    <!--<td>Hi-C</td>-->
+                    <!--<td>Mark</td>-->
+                    <!--<td>Otto</td>-->
+                    <!--<td>@mdo</td>-->
+                    <!--<td>2016.1.1</td>-->
+                    <!--<td>Li</td>-->
+                  <!--</tr>-->
+                  <!--<tr>-->
+                    <!--<td>-->
+                      <!--<a href="/exp">2</a>-->
+                    <!--</td>-->
+                    <!--<td>Hi-C</td>-->
+                    <!--<td>Jacob</td>-->
+                    <!--<td>Thornton</td>-->
+                    <!--<td>@fat</td>-->
+                    <!--<td>2016.1.1</td>-->
+                    <!--<td>Li</td>-->
+                  <!--</tr>-->
+                  <!--<tr>-->
+                    <!--<td>-->
+                      <!--<a href="test//exp">3</a>-->
+                    <!--</td>-->
+                    <!--<td>Hi-C</td>-->
+                    <!--<td>Larry</td>-->
+                    <!--<td>the Bird</td>-->
+                    <!--<td>@twitter</td>-->
+                    <!--<td>2016.1.1</td>-->
+                    <!--<td>Li</td>-->
+                  <!--</tr>-->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="col-md-12" id="table3">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Category</th>
+                    <th>Species</th>
+                    <th>Cell Type</th>
+                    <th>Number of Files</th>
+                    <th>Date</th>
+                    <th>Author</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 {% for row in categoriedProjects[3] %}
+                  <tr>
+                    <td>
+                      <a href="/exp/{{ row.id }}">{{ row.id }}</a>
+                    </td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ category_map[row.category] }}</td>
+                    <td>{{ row.species }}</td>
+                    <td>{{ row.cell_type }}</td>
+                    <td>{{ row.n_files }}</td>
+                    <td>{{ row.start_date }}</td>
+                    <td>{{ row.update_date }}</td>
+                    <td>{{ row.manager }}</td>
+
+                  </tr>
+                {% endfor %}
+                  <!--<tr>-->
+                    <!--<td>-->
+                      <!--<a href="/exp">1</a>-->
+                    <!--</td>-->
+                    <!--<td>Chia-PET</td>-->
+                    <!--<td>Mark</td>-->
+                    <!--<td>Otto</td>-->
+                    <!--<td>@mdo</td>-->
+                    <!--<td>2016.1.1</td>-->
+                    <!--<td>Liang</td>-->
+                  <!--</tr>-->
+                  <!--<tr>-->
+                    <!--<td>-->
+                      <!--<a href="/exp">2</a>-->
+                    <!--</td>-->
+                    <!--<td>Chia-PET</td>-->
+                    <!--<td>Jacob</td>-->
+                    <!--<td>Thornton</td>-->
+                    <!--<td>@fat</td>-->
+                    <!--<td>2016.1.1</td>-->
+                    <!--<td>Liang</td>-->
+                  <!--</tr>-->
+                  <!--<tr>-->
+                    <!--<td>-->
+                      <!--<a href="/exp">3</a>-->
+                    <!--</td>-->
+                    <!--<td>Chia-PET</td>-->
+                    <!--<td>Larry</td>-->
+                    <!--<td>the Bird</td>-->
+                    <!--<td>@twitter</td>-->
+                    <!--<td>2016.1.1</td>-->
+                    <!--<td>Liang</td>-->
+                  <!--</tr>-->
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+          <!-- /.row -->
+          <!-- /.row -->
+
+
+{% endblock %}
+
+
