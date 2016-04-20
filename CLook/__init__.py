@@ -1,12 +1,14 @@
 __author__ = 'yzy'
 from flask import *
 from CLook import config
-
+import os
 
 UPLOAD_FOLDER = '/home/yuan/PycharmProjects/CLook/CLook/upload'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','html','rmvb'])
 app = Flask(__name__)
-
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+app.config['APP_ROOT'] = APP_ROOT
+# print APP_ROOT
 app.secret_key = 'fuck'
 app.config['aaaa'] = 'fuck u'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link href="/static/css/global.css" rel="stylesheet" type="text/css"/>
+        <title>Matrix Test</title>
+        <script type="text/javascript" src="/static/js/d3/d3.js"></script>
+        <script type="text/javascript" src="/static/dist/js/lib/jquery-1.10.2.min.js"></script>
+    </head>
+    <body>
+        
+        <script type="text/javascript" src="/static/js/matrix/matrix.js">
+{#            // Your beautiful D3 code will go here#}
+{#            // var w = 500;#}
+{#            // var h = 50;#}
+{#            // var barPadding = 1;#}
+{#            // var dataset = [5,10,15,20,25]#}
+{##}
+{#            // var yScale = d3.scale.linear()#}
+{#            //                 .domain([0,d3.max(dataset,function(d){return d;})])#}
+{#            //                 .range([0,h]);#}
+{#            // var svg = d3.select('body').append('svg');#}
+{#            // svg.attr('width',w)#}
+{#            //     .attr('height',h);#}
+{#            // var rects = svg.selectAll('rect')#}
+{#            //                 .data(dataset)#}
+{#            //                 .enter()#}
+{#            //                 .append('rect')#}
+{#            //                 .attr("x", 0)#}
+{#   #}
+{#            // rects.attr('x',function(d,i){#}
+{#            //         return i*(w/dataset.length)#}
+{#            //     })#}
+{#            //     .attr('y',function(d){#}
+{#            //         return h-yScale(d);#}
+{#            //     })#}
+{#            //     .attr('width',w / dataset.length - barPadding)#}
+{#            //     .attr('height',function(d){#}
+{#            //         return yScale(d);#}
+{#            //     })#}
+{#            //     .attr("fill", function(d) {#}
+{#            //         return "rgb("+(255-d*10)+", 0, " + (d * 10) + ")";#}
+{#            //         // return 'green';#}
+{#            //     });#}
+{##}
+{#            var Drawer = {#}
+{#                w: 500,//default width of svg#}
+{#                h: 500,//default height of svg#}
+{#                s: 99,//default row/col number of svg#}
+{#                b: 1, //default svg border width#}
+{#                borderColor: 'black',#}
+{#                createNew: function(){#}
+{#                    var drawer = {};#}
+{#                    drawer.makeSVG = function(){#}
+{#                        var svg = d3.select('body').append('svg');#}
+{#                        svg.attr('width',Drawer.w)#}
+{#                            .attr('height',Drawer.h)#}
+{#                            .attr('border',Drawer.b);#}
+{#                        drawer.svg = svg;#}
+{#                        var borderPath = svg.append('rect')#}
+{#                                            .attr('x',0)#}
+{#                                            .attr('y',0)#}
+{#                                            .attr('height',Drawer.h)#}
+{#                                            .attr('width',Drawer.w)#}
+{#                                            .attr('fill','none')#}
+{#                                            .style('stroke',Drawer.borderColor)#}
+{#                                            .style("stroke-width", Drawer.b);#}
+{##}
+{##}
+{##}
+{##}
+{##}
+{#                    };#}
+{#                    var drawElement = function(x,y,value_r,value_g,value_b){#}
+{#                        var per_element_sz = Drawer.w/Drawer.s;#}
+{#                        if((x+1)*per_element_sz>Drawer.w || (y+1)*per_element_sz>Drawer.h){//x,y out of svg#}
+{#                            console.log('x/y out of svg range')#}
+{#                            return;#}
+{#                        }#}
+{#                        var elem = drawer.svg.append('rect');#}
+{#                        elem.attr('x',x*per_element_sz)#}
+{#                            .attr('y',y*per_element_sz)#}
+{#                            .attr('width',per_element_sz)#}
+{#                            .attr('height',per_element_sz)#}
+{#                            .attr('fill',"rgb("+(value_r)+","+(value_g)+","+(value_b)+")");#}
+{##}
+{##}
+{#                    }#}
+{#                    drawer.drawElement = drawElement;#}
+{#                    return drawer;#}
+{#                }#}
+{##}
+{##}
+{##}
+{##}
+{#            }#}
+{#            var red_scale = d3.scale.linear()#}
+{#                                .domain([0,98*98])#}
+{#                                .range([50,255]);#}
+{#            d = Drawer.createNew();#}
+{#            d.makeSVG();#}
+{#            for(var i=0;i<99;i++){#}
+{#                for(var j=0;j<99;j++){#}
+{#                    // d.drawElement(i,j,100.5555,0,0);#}
+{#                    var random_binary = 0;#}
+{#                    var random = Math.random();#}
+{#                    if(random>0.5) random_binary = 1;#}
+{#                    else random_binary = 0;#}
+{#                    // console.log('----------------',random)#}
+{#                    // console.log('++++++++++++++++++',random_binary*255)#}
+{#                    if(random_binary)#}
+{#                        d.drawElement(i,j,255,0,0);#}
+{#                    // console.log(red_scale(i*j))#}
+{#                }#}
+{#            }#}
+
+
+
+            
+
+
+
+
+                
+        </script>
+        <!-- <p></p> -->
+
+    </body>
+</html>

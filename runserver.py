@@ -1,4 +1,5 @@
 from CLook import app,config
+import os
 
 if __name__ == '__main__':
     if config.DEBUG:
