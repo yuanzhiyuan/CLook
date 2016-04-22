@@ -9,6 +9,14 @@
 // var canvas = d3.select('body').append('canvas');
 // canvas.attr('width')
 
+
+d3.select('#drag_container')
+    .style('width','200px')
+    .style('height','200px')
+    .style('overflow','hidden')
+    .style('border','1px solid');
+
+
 var Drawer = {
                 w: 500,//default width of canvas
                 h: 500,//default height of canvas
@@ -22,7 +30,7 @@ var Drawer = {
                     Drawer.s = nrows;
                     var drawer = {};
                     drawer.makeCanvas = function(){
-                    	var canvas = d3.select('body').append('canvas');
+                    	var canvas = d3.select('#drag_container').append('canvas');
                     	canvas.attr('width',Drawer.w)
                     			.attr('height',Drawer.h)
                     			.attr('id',Drawer.canvasId)
@@ -72,9 +80,12 @@ var Drawer = {
     function(data,status){
 
 
-            var canvas_width = 1000;
-            var canvas_height = 1000;
-            var canvas_nrows = 997;
+//            var canvas_width = 1000;
+//            var canvas_height = 1000;
+            var canvas_nrows = parseInt(data.split('$')[2]);
+            var each_cell_sz = 1;
+            var canvas_width = canvas_nrows * each_cell_sz;
+            var canvas_height = canvas_nrows * each_cell_sz;
 
             var d = Drawer.createNew(canvas_width,canvas_height,canvas_nrows);
             d.makeCanvas();
@@ -83,6 +94,7 @@ var Drawer = {
             var k=0;
             var data_array = data.split('$')[0].split('&');
             var data_max_min_array = data.split('$')[1].split('&');
+
             var max_data = parseInt(data_max_min_array[0]);
             var min_data = parseInt(data_max_min_array[1]);
             var x_percent_value = parseInt(data_max_min_array[2]);
@@ -101,6 +113,12 @@ var Drawer = {
                     // console.log(red_scale(i*j))
                 }
             }
+
+            $('#myCanvas').draggable({
+
+
+                containment: [200-canvas_width,200-canvas_height,0,0]
+            });
 
 
 

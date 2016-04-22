@@ -60,11 +60,24 @@ def get_matrix_data():
         max_val = 0
         min_val = 1000
         val_li = []
+        bin_sz_li = [
+	        ('2.5MB',99),
+	        ('1MB',249),
+	        ('500KB',498),
+	        ('250KB',996),
+	        ('100KB',2492),
+	        ('50KB',4984),
+	        ('25KB',9969),
+	        ('10KB',24922)
+            ]
         # with open(os.path.join(upload_dir,'chr1_500KB_norm.txt')) as f:
         # with open(os.path.join(upload_dir,'chr1_2.5MB_norm.txt')) as f:
-        with open(os.path.join(upload_dir,'chr1_250KB_norm.txt')) as f:
+
+        nth_test = 2
+
+        with open(os.path.join(upload_dir,'chr1_{name}_norm.txt'.format(name=bin_sz_li[nth_test][0]))) as f:
             current_line_str = f.next()
-            for j in range(996):
+            for j in range(bin_sz_li[nth_test][1]):
                 for i in range(0,j+1):
                     # current_line_str = f.next()
                     current_line_li = current_line_str.split('\t')
@@ -87,9 +100,96 @@ def get_matrix_data():
             x_percent_point = int(len(val_li)*0.80)
             x_percent_value = val_li[x_percent_point]
             to_send += str(x_percent_value)
+            to_send += '$'
+            to_send += str(bin_sz_li[nth_test][1])
         return to_send
 
 
 
 
+@app.route('/matrix/data/test1',methods=['POST'])
+def get_data():
+    if request.method=='POST':
+        bin_sz_li = [
+	        ('2.5MB',99),
+	        ('1MB',249),
+	        ('500KB',498),
+	        ('250KB',996),
+	        ('100KB',2492),
+	        ('50KB',4984),
+	        ('25KB',9969),
+	        ('10KB',24922)
+            ]
 
+        if request.form['type'] == 'init_data':
+            # get matrix rows number and nine position point
+            to_send = []
+            upload_dir = os.path.join(app.config['APP_ROOT'],'upload')
+            val_li = []
+            nth_test = 2
+            with open(os.path.join(upload_dir,'chr1_{name}_norm.txt'.format(name=bin_sz_li[nth_test][0]))) as f:
+                for line in f:
+                    line_li = line.split('\t')
+                    line_val = int(float(line_li[2][:-1]))
+                    val_li.append(line_val)
+            val_li.sort()
+            x_percent_point = int(len(val_li)*0.9)
+            x_percent_value = val_li[x_percent_point]
+            to_send.append(str(bin_sz_li[nth_test][1]))
+            to_send.append(str(x_percent_value))
+            return '&'.join(to_send)
+
+
+
+
+
+        # print app.config['APP_ROOT']
+    # with open('/upload')
+    #     upload_dir = os.path.join(app.config['APP_ROOT'],'upload')
+    #     to_send = ''
+    #     max_val = 0
+    #     min_val = 1000
+    #     val_li = []
+    #     bin_sz_li = [
+	 #        ('2.5MB',99),
+	 #        ('1MB',249),
+	 #        ('500KB',498),
+	 #        ('250KB',996),
+	 #        ('100KB',2492),
+	 #        ('50KB',4984),
+	 #        ('25KB',9969),
+	 #        ('10KB',24922)
+    #         ]
+    #     # with open(os.path.join(upload_dir,'chr1_500KB_norm.txt')) as f:
+    #     # with open(os.path.join(upload_dir,'chr1_2.5MB_norm.txt')) as f:
+    #
+    #     nth_test = 2
+    #
+    #     with open(os.path.join(upload_dir,'chr1_{name}_norm.txt'.format(name=bin_sz_li[nth_test][0]))) as f:
+    #         current_line_str = f.next()
+    #         for j in range(bin_sz_li[nth_test][1]):
+    #             for i in range(0,j+1):
+    #                 # current_line_str = f.next()
+    #                 current_line_li = current_line_str.split('\t')
+    #                 if j!= int(current_line_li[1]) or i!=int(current_line_li[0]):
+    #                     to_send += '0'
+    #                 else:
+    #                     to_send += str(int(float(current_line_li[2][:-1])))
+    #                     val_li.append(int(float(current_line_li[2][:-1])))
+    #                     max_val = max(int(float(current_line_li[2][:-1])),max_val)
+    #                     min_val = min(int(float(current_line_li[2][:-1])),min_val)
+    #                     print current_line_str
+    #                     current_line_str = f.next()
+    #                 to_send += '&'
+    #         to_send += '$'
+    #         to_send += str(max_val)
+    #         to_send += '&'
+    #         to_send += str(min_val)
+    #         to_send += '&'
+    #         val_li.sort()
+    #         x_percent_point = int(len(val_li)*0.80)
+    #         x_percent_value = val_li[x_percent_point]
+    #         to_send += str(x_percent_value)
+    #         to_send += '$'
+    #         to_send += str(bin_sz_li[nth_test][1])
+    #     return to_send
