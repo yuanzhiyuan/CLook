@@ -83,16 +83,16 @@ var Drawer = {
 
 var init_canvas = function(handleDrawer){
 
-    $.post('/matrix/data/test1',
+    $.post('/matrix/data',
         {
-            type:'init_data'   //获取matrix的row数，九分位点等。
+//            type:'init_data'   //获取matrix的row数，九分位点等。
         },
     function(data,status){
 
 
 
-        var canvas_nrows = parseInt(data.split('&')[0]);
-        var x_percent_value = parseInt(data.split('&')[1]);
+        var canvas_nrows = parseInt(data.split('$')[2]);
+//        var x_percent_value = parseInt(data.split('&')[1]);
         var each_cell_sz = 1;
         var canvas_width = canvas_nrows * each_cell_sz;
         var canvas_height = canvas_nrows * each_cell_sz;
@@ -101,30 +101,30 @@ var init_canvas = function(handleDrawer){
         d.makeCanvas();
         d.beforeDrawElement();
         d.setXPercentValue(x_percent_value);
-        console.log(canvas_nrows, d.x_percent_value);
+//        console.log(canvas_nrows, d.x_percent_value);
 
-//        var k=0;
-//        var data_array = data.split('$')[0].split('&');
-//        var data_max_min_array = data.split('$')[1].split('&');
-//
-//        var max_data = parseInt(data_max_min_array[0]);
-//        var min_data = parseInt(data_max_min_array[1]);
-//        var x_percent_value = parseInt(data_max_min_array[2]);
-//        var red_scale = d3.scale.linear()
-////                                .domain([min_data,max_data])
-//                            .domain([0,x_percent_value])
-//                            .range([0,255]);
-//
-//
-//        for(var j=0;j<canvas_nrows;j++){
-//            for(var i=0;i<=j;i++){
-//
-//                        d.drawElement(i,j,255,255-parseInt(red_scale(data_array[k])),255-parseInt(red_scale(data_array[k])));
-//                        d.drawElement(j,i,255,255-parseInt(red_scale(data_array[k])),255-parseInt(red_scale(data_array[k])));
-//                    k++;
-//                // console.log(red_scale(i*j))
-//            }
-//        }
+        var k=0;
+        var data_array = data.split('$')[0].split('&');
+        var data_max_min_array = data.split('$')[1].split('&');
+
+        var max_data = parseInt(data_max_min_array[0]);
+        var min_data = parseInt(data_max_min_array[1]);
+        var x_percent_value = parseInt(data_max_min_array[2]);
+        var red_scale = d3.scale.linear()
+//                                .domain([min_data,max_data])
+                            .domain([0,x_percent_value])
+                            .range([0,255]);
+
+
+        for(var j=0;j<canvas_nrows;j++){
+            for(var i=0;i<=j;i++){
+
+                        d.drawElement(i,j,255,255-parseInt(red_scale(data_array[k])),255-parseInt(red_scale(data_array[k])));
+                        d.drawElement(j,i,255,255-parseInt(red_scale(data_array[k])),255-parseInt(red_scale(data_array[k])));
+                    k++;
+                // console.log(red_scale(i*j))
+            }
+        }
 
         $('#myCanvas').draggable({
 
@@ -153,7 +153,7 @@ var get_block_data = function(x1,y1,x2,y2){
 
 
 init_canvas(function(drawer_obj){
-    alert(drawer_obj.x_percent_value);
+//    alert('aaa');
 
 
 

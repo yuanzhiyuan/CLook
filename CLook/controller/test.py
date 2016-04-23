@@ -73,7 +73,7 @@ def get_matrix_data():
         # with open(os.path.join(upload_dir,'chr1_500KB_norm.txt')) as f:
         # with open(os.path.join(upload_dir,'chr1_2.5MB_norm.txt')) as f:
 
-        nth_test = 2
+        nth_test = 3
 
         with open(os.path.join(upload_dir,'chr1_{name}_norm.txt'.format(name=bin_sz_li[nth_test][0]))) as f:
             current_line_str = f.next()
@@ -138,6 +138,376 @@ def get_data():
             to_send.append(str(bin_sz_li[nth_test][1]))
             to_send.append(str(x_percent_value))
             return '&'.join(to_send)
+
+
+app.route('/matrix/data/get',methods=['POST'])
+def get_block_data():
+    if request.method=='POST':
+
+
+        bin_sz_li = [
+	        ('2.5MB',99),
+	        ('1MB',249),
+	        ('500KB',498),
+	        ('250KB',996),
+	        ('100KB',2492),
+	        ('50KB',4984),
+	        ('25KB',9969),
+	        ('10KB',24922)
+            ]
+        nth_test = 2
+
+
+        x1 = request.form['x1']
+        y1 = request.form['y1']
+        x2 = request.form['x2']
+        y2 = request.form['y2']
+
+        upload_dir = os.path.join(app.config['APP_ROOT'],'upload')
+
+
+        if x1>x2 or y1 > y2:
+            return 'error 0'
+        if (x2-x1-y2+y1)!=0:
+            # ensure the block is square
+            return 'error 1'
+
+        to_send = []
+
+        f = open(os.path.join(upload_dir,'chr1_{name}_norm.txt'.format(name=bin_sz_li[nth_test][0])))
+        # remember to close f
+        if x2 <= y1:
+            pass
+            # easiest condition: the block is above the diagonal line
+            # with open(os.path.join(upload_dir,'chr1_{name}_norm.txt'.format(name=bin_sz_li[nth_test][0]))) as f:
+            #     for line in f:
+
+
+        elif y2 <= x1:
+            # just opposite the easiest condition
+            pass
+        elif (x2 > y1) and (x1 < y1):
+            pass
+            # the block across the diagonal line, but mainly above the diagonal line
+        elif (x1 < y2) and (x2 > y2):
+            pass
+            # opposite the former condition
+        else:
+            #x1==y1 and x2==y2
+            pass
+
+        f.close()
+
+
+
+def parse_line(line):
+    line_li = line.split('\t')
+    line_x = int(line_li[0])
+    line_y = int(line_li[1])
+    line_v = int(float(line_li[2][:-1]))
+    return line_x,line_y,line_v
+
+
+
+# the index of (x,y) in square(x1,y1,x2,y2) is (y-y1)*(x2-x1+1)+(x-x1)
+def get_array_index(x,y,x1,y1,x2,y2):
+    return (y-y1)*(x2-x1+1)+(x-x1)
+
+#use in condition that diagnal line pass the square
+# return array's order is : order of knowing the value
+def get_folded_part_of_square(x1,y1,x2,y2):
+    rst = []
+    for i in range(y1+1,x2+1):
+        for j in range(y1,i):
+            rst.append((i,j))
+    return rst
+
+
+def easiest_condition(x1,y1,x2,y2,f):
+    rst = []
+
+    # cur_x and cur_y point at the position to be given value
+    cur_x = x1
+    cur_y = y1
+
+    #put the cur_x and cur_y,   and make sure line_y >= cur_y
+    # for line in f:
+    #     line_x,line_y,line_v = parse_line(line)[:]
+    #     if line_y == y1:
+    #         if line_x == x1:
+    #             rst.append(line_v)
+    #             cur_x += 1
+    #             if cur_x > x2:
+    #                 cur_x = x1
+    #                 cur_y += 1
+    #                 if cur_y > y2:
+    #                     return rst
+    #             break
+    #         elif x1<line_x<=x2:
+    #             rst.extend([0]*(line_x-x1))
+    #             rst.append(line_v)
+    #             cur_x = line_x + 1
+    #             cur_y = line_y
+    #             if cur_x > x2:
+    #                 cur_x = x1
+    #                 cur_y += 1
+    #                 if cur_y > y2:
+    #                     return rst
+    #             break
+    #         elif line_x > x2:
+    #             rst.extend([0]*(x2-x1+1))
+    #             cur_x = x1
+    #             cur_y = line_y + 1
+    #             if cur_y > y2:
+    #                 return rst
+    #             break
+    #
+    #
+    #
+    #     elif line_y > y1 and line_y < y2:
+    #         pass
+    #     elif line_y == y2:
+    #         pass
+    #     elif line_y > y2:
+    #         pass
+
+    for line in f:
+        line_x,line_y,line_v = parse_line(line)[:]
+        if line_x > x2 and line_y > y2:
+            break
+
+        if line_x == cur_x and line_y == cur_y:
+            rst.append(line_v)
+            cur_x += 1
+            if cur_x > x2:
+                cur_x = x1
+                cur_y +=1
+                if cur_y > y2:
+                    return rst
+        elif cur_x < line_x <= x2 and line_y == cur_y:
+            rst.extend([0]*(line_x-cur_x))
+            rst.append(line_v)
+            cur_x = line_x + 1
+            if cur_x > x2:
+                cur_x = x1
+                cur_y += 1
+                if cur_y > y2:
+                    return rst
+        elif line_x > x2 and line_y == cur_y:
+
+            rst.extend([0]*(x2-cur_x+1))
+            cur_x = x1
+            cur_y += 1
+            if cur_y > y2:
+                return rst
+
+        elif line_y > cur_y:
+            if line_y > y2:
+                rst.extend([0]*(x2-cur_x+1 + (y2-cur_y)*(x2-x1+1)))
+                return rst
+            elif line_y <= y2:
+                if line_x >= x1 and line_x <= x2:
+                    rst.extend([0]*(x2-cur_x+1 + (line_y-cur_y-1)*(x2-x1+1) + line_x-x1))
+                    rst.append(line_v)
+                    cur_x = line_x + 1
+                    cur_y = line_y
+                    if cur_x > x2:
+                        cur_x = x1
+                        cur_y += 1
+                        if cur_y > y2:
+                            return rst
+                elif line_x < x1:
+                    rst.extend([0]*(x2-cur_x+1 + (line_y-cur_y-1)*(x2-x1+1)))
+                    cur_x = x1
+                    cur_y = line_y
+                elif line_x > x2:
+                    rst.extend([0]*(x2-cur_x+1 + (line_y-cur_y)*(x2-x1+1)))
+                    cur_x = x1
+                    cur_y = line_y + 1
+                    if cur_y > y2:
+                        return rst
+    return rst
+
+
+
+def diagnal_cross_condition(x1,y1,x2,y2,f):
+    rst = []
+
+    # cur_x and cur_y point at the position to be given value
+    cur_x = x1
+    cur_y = y1
+
+    folded_part = get_folded_part_of_square(x1,y1,x2,y2)
+
+
+    for line in f:
+        line_x,line_y,line_v = parse_line(line)[:]
+        if line_x > x2 and line_y > y2:
+            break
+
+
+
+
+
+
+
+        if line_x == cur_x and line_y == cur_y:
+            rst.append(line_v)
+
+
+            if (line_y,line_x) in folded_part:
+                to_put_index = get_array_index(line_y,line_x,x1,y1,x2,y2)
+                rst[to_put_index] = line_v
+
+
+            cur_x += 1
+            if cur_x > x2:
+                cur_x = x1
+                cur_y +=1
+                if cur_y > y2:
+                    return rst
+        elif cur_x < line_x <= x2 and line_y == cur_y:
+            rst.extend([0]*(line_x-cur_x))
+            rst.append(line_v)
+
+            if (line_y,line_x) in folded_part:
+                to_put_index = get_array_index(line_y,line_x,x1,y1,x2,y2)
+                rst[to_put_index] = line_v
+
+            cur_x = line_x + 1
+            if cur_x > x2:
+                cur_x = x1
+                cur_y += 1
+                if cur_y > y2:
+                    return rst
+        elif line_x > x2 and line_y == cur_y:
+
+            rst.extend([0]*(x2-cur_x+1))
+            cur_x = x1
+            cur_y += 1
+            if cur_y > y2:
+                return rst
+
+        elif line_y > cur_y:
+            if line_y > y2:
+                rst.extend([0]*(x2-cur_x+1 + (y2-cur_y)*(x2-x1+1)))
+                return rst
+            elif line_y <= y2:
+                if line_x >= x1 and line_x <= x2:
+                    rst.extend([0]*(x2-cur_x+1 + (line_y-cur_y-1)*(x2-x1+1) + line_x-x1))
+                    rst.append(line_v)
+
+                    if (line_y,line_x) in folded_part:
+                        to_put_index = get_array_index(line_y,line_x,x1,y1,x2,y2)
+                        rst[to_put_index] = line_v
+
+
+                    cur_x = line_x + 1
+                    cur_y = line_y
+                    if cur_x > x2:
+                        cur_x = x1
+                        cur_y += 1
+                        if cur_y > y2:
+                            return rst
+                elif line_x < x1:
+                    rst.extend([0]*(x2-cur_x+1 + (line_y-cur_y-1)*(x2-x1+1)))
+                    cur_x = x1
+                    cur_y = line_y
+                elif line_x > x2:
+                    rst.extend([0]*(x2-cur_x+1 + (line_y-cur_y)*(x2-x1+1)))
+                    cur_x = x1
+                    cur_y = line_y + 1
+                    if cur_y > y2:
+                        return rst
+
+
+
+        # check if next iterator line_x>line_y
+        if line_x > line_y:
+            # put cur_x and cur_y to next lie
+            # and take points that line_x > line_y placeholder
+            rst.extend([0]*(x2-cur_y))
+            cur_x = x1
+            cur_y += 1
+            if cur_y > y2:
+                return rst
+    return rst
+
+
+
+
+def test_all_condition(x1,y1,x2,y2,nth_test):
+
+
+
+    bin_sz_li = [
+        ('2.5MB',99),
+        ('1MB',249),
+        ('500KB',498),
+        ('250KB',996),
+        ('100KB',2492),
+        ('50KB',4984),
+        ('25KB',9969),
+        ('10KB',24922)
+        ]
+
+
+
+
+
+    upload_dir = os.path.join(app.config['APP_ROOT'],'upload')
+
+
+    if x1>x2 or y1 > y2:
+        return 'error 0'
+    if (x2-x1-y2+y1)!=0:
+        # ensure the block is square
+        return 'error 1'
+
+    rst = []
+
+    f = open(os.path.join(upload_dir,'chr1_{name}_norm.txt'.format(name=bin_sz_li[nth_test][0])))
+    # remember to close f
+    if x2 <= y1:
+        rst = easiest_condition(x1,y1,x2,y2,f)
+        # easiest condition: the block is above the diagonal line
+        # with open(os.path.join(upload_dir,'chr1_{name}_norm.txt'.format(name=bin_sz_li[nth_test][0]))) as f:
+        #     for line in f:
+
+
+    elif y2 <= x1:
+        # just opposite the easiest condition
+        rst = easiest_condition(y1,x1,y2,x2,f)
+    elif (x2 > y1) and (x1 < y1):
+        rst = diagnal_cross_condition(x1,y1,x2,y2,f)
+        # the block across the diagonal line, but mainly above the diagonal line
+    elif (x1 < y2) and (x2 > y2):
+        rst = diagnal_cross_condition(y1,x1,y2,x2,f)
+        # opposite the former condition
+    else:
+        #x1==y1 and x2==y2
+        rst = diagnal_cross_condition(x1,y1,x2,y2,f)
+
+    f.close()
+    return rst
+
+
+
+
+
+# nth_test = 2
+# x1 = 0
+# y1 = 0
+# x2 = 498
+# y2 = 498
+#
+# a = test_all_condition(x1,y1,x2,y2,nth_test)
+# print len(a)
+
+
+
+
+
 
 
 
