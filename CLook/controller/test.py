@@ -60,20 +60,11 @@ def get_matrix_data():
         max_val = 0
         min_val = 1000
         val_li = []
-        bin_sz_li = [
-	        ('2.5MB',99),
-	        ('1MB',249),
-	        ('500KB',498),
-	        ('250KB',996),
-	        ('100KB',2492),
-	        ('50KB',4984),
-	        ('25KB',9969),
-	        ('10KB',24922)
-            ]
+        bin_sz_li = app.config['test_matrix']
         # with open(os.path.join(upload_dir,'chr1_500KB_norm.txt')) as f:
         # with open(os.path.join(upload_dir,'chr1_2.5MB_norm.txt')) as f:
 
-        nth_test = 3
+        nth_test = 2
 
         with open(os.path.join(upload_dir,'chr1_{name}_norm.txt'.format(name=bin_sz_li[nth_test][0]))) as f:
             current_line_str = f.next()
@@ -88,7 +79,7 @@ def get_matrix_data():
                         val_li.append(int(float(current_line_li[2][:-1])))
                         max_val = max(int(float(current_line_li[2][:-1])),max_val)
                         min_val = min(int(float(current_line_li[2][:-1])),min_val)
-                        print current_line_str
+                        # print current_line_str
                         current_line_str = f.next()
                     to_send += '&'
             to_send += '$'
@@ -110,16 +101,7 @@ def get_matrix_data():
 @app.route('/matrix/data/test1',methods=['POST'])
 def get_data():
     if request.method=='POST':
-        bin_sz_li = [
-	        ('2.5MB',99),
-	        ('1MB',249),
-	        ('500KB',498),
-	        ('250KB',996),
-	        ('100KB',2492),
-	        ('50KB',4984),
-	        ('25KB',9969),
-	        ('10KB',24922)
-            ]
+        bin_sz_li = app.config['test_matrix']
 
         if request.form['type'] == 'init_data':
             # get matrix rows number and nine position point
@@ -140,28 +122,19 @@ def get_data():
             return '&'.join(to_send)
 
 
-app.route('/matrix/data/get',methods=['POST'])
+@app.route('/matrix/data/get',methods=['POST'])
 def get_block_data():
     if request.method=='POST':
 
 
-        bin_sz_li = [
-	        ('2.5MB',99),
-	        ('1MB',249),
-	        ('500KB',498),
-	        ('250KB',996),
-	        ('100KB',2492),
-	        ('50KB',4984),
-	        ('25KB',9969),
-	        ('10KB',24922)
-            ]
+        bin_sz_li = app.config['test_matrix']
         nth_test = 2
 
 
-        x1 = request.form['x1']
-        y1 = request.form['y1']
-        x2 = request.form['x2']
-        y2 = request.form['y2']
+        x1 = int(float(request.form['x1']))
+        y1 = int(float(request.form['y1']))
+        x2 = int(float(request.form['x2']))
+        y2 = int(float(request.form['y2']))
 
         upload_dir = os.path.join(app.config['APP_ROOT'],'upload')
 
@@ -172,31 +145,61 @@ def get_block_data():
             # ensure the block is square
             return 'error 1'
 
-        to_send = []
+
+        nrows = x2-x1+1
 
         f = open(os.path.join(upload_dir,'chr1_{name}_norm.txt'.format(name=bin_sz_li[nth_test][0])))
         # remember to close f
         if x2 <= y1:
-            pass
-            # easiest condition: the block is above the diagonal line
-            # with open(os.path.join(upload_dir,'chr1_{name}_norm.txt'.format(name=bin_sz_li[nth_test][0]))) as f:
-            #     for line in f:
+            rst = easiest_condition(x1,y1,x2,y2,f)
+        # easiest condition: the block is above the diagonal line
+        # with open(os.path.join(upload_dir,'chr1_{name}_norm.txt'.format(name=bin_sz_li[nth_test][0]))) as f:
+        #     for line in f:
 
 
         elif y2 <= x1:
             # just opposite the easiest condition
-            pass
+            rst = easiest_condition(y1,x1,y2,x2,f)
+
+            for i in range(nrows):
+                for j in range(i):
+                    k = i*nrows + j
+                    k_ = j*nrows + i
+                    # print k,k_
+                    # print k,k_
+                    rst[k_],rst[k] = rst[k],rst[k_]
+
         elif (x2 > y1) and (x1 < y1):
-            pass
+            rst = diagnal_cross_condition(x1,y1,x2,y2,f)
             # the block across the diagonal line, but mainly above the diagonal line
         elif (x1 < y2) and (x2 > y2):
-            pass
+            rst = diagnal_cross_condition(y1,x1,y2,x2,f)
+
+            for i in range(nrows):
+                for j in range(i):
+                    k = i*nrows + j
+                    k_ = j*nrows + i
+                    # print k,k_
+                    # print k,k_
+                    rst[k_],rst[k] = rst[k],rst[k_]
             # opposite the former condition
         else:
             #x1==y1 and x2==y2
-            pass
+            rst = diagnal_cross_condition(x1,y1,x2,y2,f)
 
         f.close()
+
+        rst = map(str,rst)
+        # find the xpercent point
+        to_send = '&'.join(rst)
+        # rst.sort()
+        # x_percent_point = int(len(rst)*0.9)
+        # x_percent_value = rst[x_percent_point]
+        # to_send += '$'
+        # to_send += str(x_percent_value)
+
+        return to_send
+
 
 
 
@@ -440,16 +443,7 @@ def test_all_condition(x1,y1,x2,y2,nth_test):
 
 
 
-    bin_sz_li = [
-        ('2.5MB',99),
-        ('1MB',249),
-        ('500KB',498),
-        ('250KB',996),
-        ('100KB',2492),
-        ('50KB',4984),
-        ('25KB',9969),
-        ('10KB',24922)
-        ]
+    bin_sz_li = app.config['test_matrix']
 
 
 
@@ -496,10 +490,10 @@ def test_all_condition(x1,y1,x2,y2,nth_test):
 
 
 # nth_test = 2
-# x1 = 0
-# y1 = 0
-# x2 = 498
-# y2 = 498
+# x1 = 200
+# y1 = 250
+# x2 = 300
+# y2 = 350
 #
 # a = test_all_condition(x1,y1,x2,y2,nth_test)
 # print len(a)

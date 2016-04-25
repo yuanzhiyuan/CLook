@@ -11,6 +11,16 @@ app.config['APP_ROOT'] = APP_ROOT
 # print APP_ROOT
 app.secret_key = 'fuck'
 app.config['aaaa'] = 'fuck u'
+app.config['test_matrix'] = [
+	        ('2.5MB',99 +1),
+	        ('1MB',249 +1),
+	        ('500KB',498+1),
+	        ('250KB',996+1),
+	        ('100KB',2492+1),
+	        ('50KB',4984+1),
+	        ('25KB',9969+1),
+	        ('10KB',24922+1)
+            ]
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['ALLOWED_EXTENSIONS'] = ALLOWED_EXTENSIONS
 import CLook.controller.index
