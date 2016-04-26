@@ -10,6 +10,7 @@
 // canvas.attr('width')
 
 div_sz = 200;
+bias_pxs = 8;
 
 d3.select('#drag_container')
     .style('width',div_sz+'px')
@@ -42,7 +43,7 @@ var Drawer = {
                     	var canvas = d3.select('#drag_container').append('canvas');
                     	canvas.attr('width',Drawer.w+'px')
                     			.attr('height',Drawer.h+'px')
-                    			.attr('id',Drawer.canvasId)
+                    			.attr('id',Drawer.canvasId);
 
                     	drawer.canvas = canvas;
 
@@ -104,7 +105,7 @@ var init_canvas = function(handleDrawer){
         var canvas_nrows = parseInt(data.split('&')[0]);
         var x_percent_value = parseInt(data.split('&')[1]);
         var each_cell_sz = 1;
-        console.log(each_cell_sz);
+//        console.log(each_cell_sz);
         var canvas_width = canvas_nrows * each_cell_sz;
         var canvas_height = canvas_nrows * each_cell_sz;
 //        console.log(canvas_nrows);
@@ -141,17 +142,17 @@ var init_canvas = function(handleDrawer){
         $('#myCanvas').draggable({
 
 
-            containment: [div_sz-canvas_width+8,div_sz-canvas_height+8,8,8],
+            containment: [div_sz-canvas_width+bias_pxs,div_sz-canvas_height+bias_pxs,bias_pxs,bias_pxs],
             // 为什么要加8？ 这里的containment相对应的是整个页面的位置，而不是parent的位置。而canvas的parent（div）默认在页面的（8,8）位置。
 
             stop:function(event,ui){
 //                console.log(d.canvas_bitmap[d.canvas_bitmap.length-1]);
 
 //                获取当前窗口区域在整个canvas的坐标
-                var cur_win_x1 = ui.offset.top * (-1)/(Drawer.w/Drawer.s);
-                var cur_win_y1 = ui.offset.left * (-1)/(Drawer.w/Drawer.s);
-                var cur_win_x2 = cur_win_x1 + div_sz/(Drawer.w/Drawer.s);
-                var cur_win_y2 = cur_win_y1 + div_sz/(Drawer.w/Drawer.s);
+                var cur_win_x1 = (ui.offset.top * (-1)+bias_pxs)/(Drawer.w/Drawer.s);
+                var cur_win_y1 = (ui.offset.left * (-1)+bias_pxs)/(Drawer.w/Drawer.s);
+                var cur_win_x2 = cur_win_x1 + (div_sz-1)/(Drawer.w/Drawer.s);
+                var cur_win_y2 = cur_win_y1 + (div_sz-1)/(Drawer.w/Drawer.s);
 //                console.log(cur_win_x1,cur_win_y1);
 //                console.log(cur_win_x2,cur_win_y2);
                 var scale_ = d3.scale.linear()
@@ -166,17 +167,19 @@ var init_canvas = function(handleDrawer){
                 get_block_data(cur_win_x1,cur_win_y1,cur_win_x2,cur_win_y2,function(data){
                     var data_array = data.split('&');
                     var k = 0;
+                    console.log(d.canvas_bitmap.length);
+                    console.log(d.canvas_bitmap[d.canvas_bitmap.length-1]);
                     for(var j = cur_win_y1;j<=cur_win_y2;j++){
                         for(var i=cur_win_x1;i<=cur_win_x2;i++){
-//                            console.log(d.canvas_bitmap[get_array_index(i,j,Drawer.s+1)]);
-//                            if(d.canvas_bitmap[get_array_index(i,j, Drawer.s+1)]==0){
+//                            console.log(d.canvas_bitmap[get_array_index(i,j,Drawer.s)]);
+                            if(d.canvas_bitmap[get_array_index(i,j, Drawer.s)]==0){
 //                            console.log(red_scale(parseInt(data_array[k]), d.x_percent_value,scale_))
-                            console.log(i,j);
+
 
                                 d.drawElement(i,j,255,255-parseInt(red_scale(parseInt(data_array[k]), d.x_percent_value,scale_)),255-parseInt(red_scale(parseInt(data_array[k]), d.x_percent_value,scale_)));
-                                d.canvas_bitmap[get_array_index(i,j, Drawer.s+1)]=1;
+                                d.canvas_bitmap[get_array_index(i,j, Drawer.s)]=1;
 //                                console.log(i,j);
-//                            }
+                            }
 
                             k++;
                         }
@@ -201,6 +204,8 @@ var get_block_data = function(x1,y1,x2,y2,handle_data){
         },
         function(data,status){
            //希望是排好序的data，减轻浏览器负担
+//                    console.log('get_blocked_data',x1,y1,x2,y2)
+
             handle_data(data);
         });
 }
@@ -211,8 +216,8 @@ init_canvas(function(drawer_obj){
 
     var cur_win_x1 = 0;
     var cur_win_y1 = 0;
-    var cur_win_x2 = div_sz/(Drawer.w/Drawer.s);
-    var cur_win_y2 = div_sz/(Drawer.w/Drawer.s);
+    var cur_win_x2 = (div_sz-1)/(Drawer.w/Drawer.s);
+    var cur_win_y2 = (div_sz-1)/(Drawer.w/Drawer.s);
     var scale_ = d3.scale.linear()
 ////                                .domain([min_data,max_data])
                             .domain([0,drawer_obj.x_percent_value])
@@ -226,7 +231,7 @@ init_canvas(function(drawer_obj){
         var k = 0;
         for(var j = cur_win_y1;j<=cur_win_y2;j++){
             for(var i=cur_win_x1;i<=cur_win_x2;i++){
-                drawer_obj.canvas_bitmap[get_array_index(i,j,Drawer.s+1)] = 1;
+                drawer_obj.canvas_bitmap[get_array_index(i,j,Drawer.s)] = 1;
                 drawer_obj.drawElement(i,j,255,255-parseInt(red_scale(parseInt(data_array[k]),drawer_obj.x_percent_value,scale_)),255-parseInt(red_scale(parseInt(data_array[k]),drawer_obj.x_percent_value,scale_)));
                 k++;
             }

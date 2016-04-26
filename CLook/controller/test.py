@@ -136,6 +136,8 @@ def get_block_data():
         x2 = int(float(request.form['x2']))
         y2 = int(float(request.form['y2']))
 
+        print '---------------',x1,y1,x2,y2
+
         upload_dir = os.path.join(app.config['APP_ROOT'],'upload')
 
 
@@ -160,14 +162,18 @@ def get_block_data():
         elif y2 <= x1:
             # just opposite the easiest condition
             rst = easiest_condition(y1,x1,y2,x2,f)
-
+            print len(rst)
             for i in range(nrows):
                 for j in range(i):
                     k = i*nrows + j
                     k_ = j*nrows + i
                     # print k,k_
                     # print k,k_
-                    rst[k_],rst[k] = rst[k],rst[k_]
+                    try:
+                        rst[k_],rst[k] = rst[k],rst[k_]
+                    except IndexError:
+                        print i,j,k,nrows
+
 
         elif (x2 > y1) and (x1 < y1):
             rst = diagnal_cross_condition(x1,y1,x2,y2,f)
