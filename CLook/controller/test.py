@@ -119,6 +119,7 @@ def get_data():
             x_percent_value = val_li[x_percent_point]
             to_send.append(str(bin_sz_li[nth_test][1]))
             to_send.append(str(x_percent_value))
+
             return '&'.join(to_send)
 
 
@@ -135,7 +136,7 @@ def get_block_data():
         y1 = int(float(request.form['y1']))
         x2 = int(float(request.form['x2']))
         y2 = int(float(request.form['y2']))
-
+        x_percent_value = float(request.form['x_percent_value'])
         print '---------------',x1,y1,x2,y2
 
         upload_dir = os.path.join(app.config['APP_ROOT'],'upload')
@@ -153,7 +154,7 @@ def get_block_data():
         f = open(os.path.join(upload_dir,'chr1_{name}_norm.txt'.format(name=bin_sz_li[nth_test][0])))
         # remember to close f
         if x2 <= y1:
-            rst = easiest_condition(x1,y1,x2,y2,f)
+            rst = easiest_condition(x1,y1,x2,y2,f,x_percent_value)
         # easiest condition: the block is above the diagonal line
         # with open(os.path.join(upload_dir,'chr1_{name}_norm.txt'.format(name=bin_sz_li[nth_test][0]))) as f:
         #     for line in f:
@@ -161,7 +162,7 @@ def get_block_data():
 
         elif y2 <= x1:
             # just opposite the easiest condition
-            rst = easiest_condition(y1,x1,y2,x2,f)
+            rst = easiest_condition(y1,x1,y2,x2,f,x_percent_value)
             print len(rst)
             for i in range(nrows):
                 for j in range(i):
@@ -176,10 +177,10 @@ def get_block_data():
 
 
         elif (x2 > y1) and (x1 < y1):
-            rst = diagnal_cross_condition(x1,y1,x2,y2,f)
+            rst = diagnal_cross_condition(x1,y1,x2,y2,f,x_percent_value)
             # the block across the diagonal line, but mainly above the diagonal line
         elif (x1 < y2) and (x2 > y2):
-            rst = diagnal_cross_condition(y1,x1,y2,x2,f)
+            rst = diagnal_cross_condition(y1,x1,y2,x2,f,x_percent_value)
 
             for i in range(nrows):
                 for j in range(i):
@@ -191,13 +192,13 @@ def get_block_data():
             # opposite the former condition
         else:
             #x1==y1 and x2==y2
-            rst = diagnal_cross_condition(x1,y1,x2,y2,f)
+            rst = diagnal_cross_condition(x1,y1,x2,y2,f,x_percent_value)
 
         f.close()
 
-        rst = map(str,rst)
+        # rst = map(str,rst)
         # find the xpercent point
-        to_send = '&'.join(rst)
+        to_send = ''.join(rst)
         # rst.sort()
         # x_percent_point = int(len(rst)*0.9)
         # x_percent_value = rst[x_percent_point]
@@ -209,13 +210,42 @@ def get_block_data():
 
 
 
-def parse_line(line):
+# def parse_line(line):
+#     line_li = line.split('\t')
+#     line_x = int(line_li[0])
+#     line_y = int(line_li[1])
+#     line_v = int(float(line_li[2][:-1]))
+#     return line_x,line_y,line_v
+
+def parse_line(line,threshold):
     line_li = line.split('\t')
     line_x = int(line_li[0])
     line_y = int(line_li[1])
-    line_v = int(float(line_li[2][:-1]))
-    return line_x,line_y,line_v
 
+
+    line_v = line_li[2]
+    scaled_val = scale_linev(line_v,threshold)
+    true_val = 255-scaled_val
+    # if line_x==259 and line_y==0:
+        # print line_v,scaled_val,true_val,turn_color_to_2byte(scaled_val),turn_color_to_2byte(true_val)
+    # print true_val,scaled_val,turn_color_to_2byte(true_val),turn_color_to_2byte(scaled_val)
+    return line_x,line_y,turn_color_to_2byte(true_val)
+
+def scale_linev(line_v,threshold):
+    line_v = float(line_v)
+    threshold = float(threshold)
+    if line_v >= threshold:
+        return 255
+    else:
+        return int(255*line_v/threshold)
+
+
+
+def baseN(num,b,numerals="0123456789abcdefghijklmnopqrstuvwxyz"):
+    return ((num == 0) and numerals[0]) or (baseN(num // b, b, numerals).lstrip(numerals[0]) + numerals[num % b])
+def turn_color_to_2byte(color_val):
+    # turn 0~255 to 16 jinzhi as two char
+    return ('00'+baseN(color_val,16))[-2:]
 
 
 # the index of (x,y) in square(x1,y1,x2,y2) is (y-y1)*(x2-x1+1)+(x-x1)
@@ -232,7 +262,7 @@ def get_folded_part_of_square(x1,y1,x2,y2):
     return rst
 
 
-def easiest_condition(x1,y1,x2,y2,f):
+def easiest_condition(x1,y1,x2,y2,f,x_percent_value):
     rst = []
 
     # cur_x and cur_y point at the position to be given value
@@ -253,7 +283,7 @@ def easiest_condition(x1,y1,x2,y2,f):
     #                     return rst
     #             break
     #         elif x1<line_x<=x2:
-    #             rst.extend([0]*(line_x-x1))
+    #             rst.extend(['ff']*(line_x-x1))
     #             rst.append(line_v)
     #             cur_x = line_x + 1
     #             cur_y = line_y
@@ -264,7 +294,7 @@ def easiest_condition(x1,y1,x2,y2,f):
     #                     return rst
     #             break
     #         elif line_x > x2:
-    #             rst.extend([0]*(x2-x1+1))
+    #             rst.extend(['ff']*(x2-x1+1))
     #             cur_x = x1
     #             cur_y = line_y + 1
     #             if cur_y > y2:
@@ -281,7 +311,8 @@ def easiest_condition(x1,y1,x2,y2,f):
     #         pass
 
     for line in f:
-        line_x,line_y,line_v = parse_line(line)[:]
+        line_x,line_y,line_v = parse_line(line,x_percent_value)[:]
+
         if line_x > x2 and line_y > y2:
             break
 
@@ -294,7 +325,7 @@ def easiest_condition(x1,y1,x2,y2,f):
                 if cur_y > y2:
                     return rst
         elif cur_x < line_x <= x2 and line_y == cur_y:
-            rst.extend([0]*(line_x-cur_x))
+            rst.extend(['ff']*(line_x-cur_x))
             rst.append(line_v)
             cur_x = line_x + 1
             if cur_x > x2:
@@ -304,7 +335,7 @@ def easiest_condition(x1,y1,x2,y2,f):
                     return rst
         elif line_x > x2 and line_y == cur_y:
 
-            rst.extend([0]*(x2-cur_x+1))
+            rst.extend(['ff']*(x2-cur_x+1))
             cur_x = x1
             cur_y += 1
             if cur_y > y2:
@@ -312,11 +343,11 @@ def easiest_condition(x1,y1,x2,y2,f):
 
         elif line_y > cur_y:
             if line_y > y2:
-                rst.extend([0]*(x2-cur_x+1 + (y2-cur_y)*(x2-x1+1)))
+                rst.extend(['ff']*(x2-cur_x+1 + (y2-cur_y)*(x2-x1+1)))
                 return rst
             elif line_y <= y2:
                 if line_x >= x1 and line_x <= x2:
-                    rst.extend([0]*(x2-cur_x+1 + (line_y-cur_y-1)*(x2-x1+1) + line_x-x1))
+                    rst.extend(['ff']*(x2-cur_x+1 + (line_y-cur_y-1)*(x2-x1+1) + line_x-x1))
                     rst.append(line_v)
                     cur_x = line_x + 1
                     cur_y = line_y
@@ -326,20 +357,21 @@ def easiest_condition(x1,y1,x2,y2,f):
                         if cur_y > y2:
                             return rst
                 elif line_x < x1:
-                    rst.extend([0]*(x2-cur_x+1 + (line_y-cur_y-1)*(x2-x1+1)))
+                    rst.extend(['ff']*(x2-cur_x+1 + (line_y-cur_y-1)*(x2-x1+1)))
                     cur_x = x1
                     cur_y = line_y
                 elif line_x > x2:
-                    rst.extend([0]*(x2-cur_x+1 + (line_y-cur_y)*(x2-x1+1)))
+                    rst.extend(['ff']*(x2-cur_x+1 + (line_y-cur_y)*(x2-x1+1)))
                     cur_x = x1
                     cur_y = line_y + 1
                     if cur_y > y2:
                         return rst
+
     return rst
 
 
 
-def diagnal_cross_condition(x1,y1,x2,y2,f):
+def diagnal_cross_condition(x1,y1,x2,y2,f,x_percent_value):
     rst = []
 
     # cur_x and cur_y point at the position to be given value
@@ -350,7 +382,9 @@ def diagnal_cross_condition(x1,y1,x2,y2,f):
 
 
     for line in f:
-        line_x,line_y,line_v = parse_line(line)[:]
+        line_x,line_y,line_v = parse_line(line,x_percent_value)[:]
+        if line_x==line_y:
+            print '--===',line_v
         if line_x > x2 and line_y > y2:
             break
 
@@ -376,7 +410,7 @@ def diagnal_cross_condition(x1,y1,x2,y2,f):
                 if cur_y > y2:
                     return rst
         elif cur_x < line_x <= x2 and line_y == cur_y:
-            rst.extend([0]*(line_x-cur_x))
+            rst.extend(['ff']*(line_x-cur_x))
             rst.append(line_v)
 
             if (line_y,line_x) in folded_part:
@@ -391,7 +425,7 @@ def diagnal_cross_condition(x1,y1,x2,y2,f):
                     return rst
         elif line_x > x2 and line_y == cur_y:
 
-            rst.extend([0]*(x2-cur_x+1))
+            rst.extend(['ff']*(x2-cur_x+1))
             cur_x = x1
             cur_y += 1
             if cur_y > y2:
@@ -399,11 +433,11 @@ def diagnal_cross_condition(x1,y1,x2,y2,f):
 
         elif line_y > cur_y:
             if line_y > y2:
-                rst.extend([0]*(x2-cur_x+1 + (y2-cur_y)*(x2-x1+1)))
+                rst.extend(['ff']*(x2-cur_x+1 + (y2-cur_y)*(x2-x1+1)))
                 return rst
             elif line_y <= y2:
                 if line_x >= x1 and line_x <= x2:
-                    rst.extend([0]*(x2-cur_x+1 + (line_y-cur_y-1)*(x2-x1+1) + line_x-x1))
+                    rst.extend(['ff']*(x2-cur_x+1 + (line_y-cur_y-1)*(x2-x1+1) + line_x-x1))
                     rst.append(line_v)
 
                     if (line_y,line_x) in folded_part:
@@ -419,11 +453,11 @@ def diagnal_cross_condition(x1,y1,x2,y2,f):
                         if cur_y > y2:
                             return rst
                 elif line_x < x1:
-                    rst.extend([0]*(x2-cur_x+1 + (line_y-cur_y-1)*(x2-x1+1)))
+                    rst.extend(['ff']*(x2-cur_x+1 + (line_y-cur_y-1)*(x2-x1+1)))
                     cur_x = x1
                     cur_y = line_y
                 elif line_x > x2:
-                    rst.extend([0]*(x2-cur_x+1 + (line_y-cur_y)*(x2-x1+1)))
+                    rst.extend(['ff']*(x2-cur_x+1 + (line_y-cur_y)*(x2-x1+1)))
                     cur_x = x1
                     cur_y = line_y + 1
                     if cur_y > y2:
@@ -435,7 +469,7 @@ def diagnal_cross_condition(x1,y1,x2,y2,f):
         if line_x > line_y:
             # put cur_x and cur_y to next lie
             # and take points that line_x > line_y placeholder
-            rst.extend([0]*(x2-cur_y))
+            rst.extend(['ff']*(x2-cur_y))
             cur_x = x1
             cur_y += 1
             if cur_y > y2:

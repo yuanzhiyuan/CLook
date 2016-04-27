@@ -77,7 +77,8 @@ var Drawer = {
                     	// var ctx = document.getElementById('myCanvas').getContext('2d');
 
 
-                    	drawer.ctx.fillStyle = "rgb("+value_r+","+value_g+","+value_b+")";
+//                    	drawer.ctx.fillStyle = "rgb("+value_r+","+value_g+","+value_b+")";
+                        drawer.ctx.fillStyle = "#"+value_r+value_g+value_b;
                     	drawer.ctx.fillRect(x_pos,y_pos,drawer.each_cell_size,drawer.each_cell_size);
                     	// drawer.ctx.fillRect(x_pos+each_cell_size,y_pos,each_cell_size,each_cell_size);
                     }
@@ -164,22 +165,28 @@ var init_canvas = function(handleDrawer){
                     else    return scale_(val);
                 }
 
-                get_block_data(cur_win_x1,cur_win_y1,cur_win_x2,cur_win_y2,function(data){
-                    var data_array = data.split('&');
+                get_block_data(cur_win_x1,cur_win_y1,cur_win_x2,cur_win_y2, d.x_percent_value,function(data){
+//                    var data_array = parse_server_data_to_255(data);
+
+//                    var data_array = data.split('&');
+//                    console.log(data_array.length);
                     var k = 0;
-                    console.log(d.canvas_bitmap.length);
-                    console.log(d.canvas_bitmap[d.canvas_bitmap.length-1]);
+//                    console.log(d.canvas_bitmap.length);
+//                    console.log(d.canvas_bitmap[d.canvas_bitmap.length-1]);
                     for(var j = cur_win_y1;j<=cur_win_y2;j++){
                         for(var i=cur_win_x1;i<=cur_win_x2;i++){
 //                            console.log(d.canvas_bitmap[get_array_index(i,j,Drawer.s)]);
-                            if(d.canvas_bitmap[get_array_index(i,j, Drawer.s)]==0){
+//                            if(d.canvas_bitmap[get_array_index(i,j, Drawer.s)]==0){
 //                            console.log(red_scale(parseInt(data_array[k]), d.x_percent_value,scale_))
 
 
-                                d.drawElement(i,j,255,255-parseInt(red_scale(parseInt(data_array[k]), d.x_percent_value,scale_)),255-parseInt(red_scale(parseInt(data_array[k]), d.x_percent_value,scale_)));
-                                d.canvas_bitmap[get_array_index(i,j, Drawer.s)]=1;
+                                d.drawElement(i,j,'ff',data.slice(2*k,2*k+2),data.slice(2*k,2*k+2));
+//                                d.drawElement(i,j,255,255-data_array[k],255-data_array[k]);
+//                                d.drawElement(i,j,255,255-get_value_by_two_char(data.slice(2*k,2*k+2)),255-get_value_by_two_char(data.slice(2*k,2*k+2)));
+//                                d.drawElement(i,j,255,255-parseInt(red_scale(parseInt(data_array[k]), d.x_percent_value,scale_)),255-parseInt(red_scale(parseInt(data_array[k]), d.x_percent_value,scale_)));
+//                                d.canvas_bitmap[get_array_index(i,j, Drawer.s)]=1;
 //                                console.log(i,j);
-                            }
+//                            }
 
                             k++;
                         }
@@ -193,14 +200,15 @@ var init_canvas = function(handleDrawer){
 }
 
 
-var get_block_data = function(x1,y1,x2,y2,handle_data){
+var get_block_data = function(x1,y1,x2,y2,x_percent_value,handle_data){
     //获取某正方形中需要的数据
     $.post('/matrix/data/get',
         {
             x1:x1,
             y1:y1,
             x2:x2,
-            y2:y2
+            y2:y2,
+            x_percent_value:x_percent_value
         },
         function(data,status){
            //希望是排好序的data，减轻浏览器负担
@@ -210,6 +218,43 @@ var get_block_data = function(x1,y1,x2,y2,handle_data){
         });
 }
 
+
+var parse_server_data_to_255 = function(data){
+    var rst_len = data.length/2;
+    var rst = new Array(rst_len);
+    for(var i=0;i<rst_len;i++){
+        cur_val_str = data.slice(i*2,i*2+2);
+        cur_val = get_value_by_two_char(cur_val_str);
+        console.log(cur_val,cur_val_str);
+
+        rst[i] = cur_val;
+
+    }
+    return rst;
+}
+
+
+
+
+
+
+var get_value_by_two_char = function(str){
+    var a = [];
+    a['a'] = 10;
+    a['b'] = 11;
+    a['c'] = 12;
+    a['d'] = 13;
+    a['e'] = 14;
+    a['f'] = 15;
+
+//    slow
+//    var val_map = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9','a','b','c','d','e','f'];
+    var high = a[str[0]]==undefined?parseInt(str[0]):a[str[0]];
+    var low = a[str[1]]==undefined?parseInt(str[1]):a[str[1]];
+
+
+    return high*16 + low;
+}
 
 init_canvas(function(drawer_obj){
 //    alert('aaa');
@@ -226,13 +271,19 @@ init_canvas(function(drawer_obj){
         if(val >= threshold)    return 255;
         else    return scale_(val);
     }
-    get_block_data(cur_win_x1,cur_win_y1,cur_win_x2,cur_win_y2,function(data){
-        var data_array = data.split('&');
+    get_block_data(cur_win_x1,cur_win_y1,cur_win_x2,cur_win_y2,drawer_obj.x_percent_value,function(data){
+//        var data_array = data.split('&');
+//        var data_array = parse_server_data_to_255(data);
         var k = 0;
         for(var j = cur_win_y1;j<=cur_win_y2;j++){
             for(var i=cur_win_x1;i<=cur_win_x2;i++){
-                drawer_obj.canvas_bitmap[get_array_index(i,j,Drawer.s)] = 1;
-                drawer_obj.drawElement(i,j,255,255-parseInt(red_scale(parseInt(data_array[k]),drawer_obj.x_percent_value,scale_)),255-parseInt(red_scale(parseInt(data_array[k]),drawer_obj.x_percent_value,scale_)));
+//                drawer_obj.canvas_bitmap[get_array_index(i,j,Drawer.s)] = 1;
+//                drawer_obj.drawElement(i,j,255,255-data_array[k],255-data_array[k]);
+//                console.log(data.slice(2*k,2*k+2));
+//                  drawer_obj.drawElement(i,j,'ff','00','00');
+                  drawer_obj.drawElement(i,j,'ff',data.slice(2*k,2*k+2),data.slice(2*k,2*k+2));
+
+//                drawer_obj.drawElement(i,j,255,255-parseInt(red_scale(parseInt(data_array[k]),drawer_obj.x_percent_value,scale_)),255-parseInt(red_scale(parseInt(data_array[k]),drawer_obj.x_percent_value,scale_)));
                 k++;
             }
         }
