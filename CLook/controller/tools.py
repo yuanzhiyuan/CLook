@@ -14,6 +14,8 @@ def pagination(totalElements,currentPage,pageSize,preLink,paginationSize):
 
 @app.template_filter('timeformat')
 def timeformat_filter(t,formatstr):
+    if t==0:
+        return None
     return time.strftime(formatstr,time.localtime(int(t)))
 
 def addLock():

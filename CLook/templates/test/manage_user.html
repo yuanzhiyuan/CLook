@@ -1,0 +1,40 @@
+{% extends 'test/base.html' %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="section">
+      <div class="col-lg-12">
+        <div class="addUser_row">
+            <div class="addUser_leftRow">用户名</div>
+            <div class="addUser_rightRow"><input type="text" id="username"/></div>
+          </div>
+          <div class="addUser_row">
+            <div class="addUser_leftRow">密码</div>
+            <div class="addUser_rightRow"><input type="password" id="password"/></div>
+          </div>
+          <div class="addUser_row">
+            <div class="addUser_leftRow">重复密码</div>
+            <div class="addUser_rightRow"><input type="password" id="repassword"/></div>
+          </div>
+          <div class="addUser_row">
+            <div class="addUser_leftRow"></div>
+            <div class="addUser_rightRow"><button type="submit" onclick="addUser()">提交</button></div>
+          </div>
+      </div>
+    </div>
+</div>
+
+
+
+
+
+
+{% endblock %}
+
+
+        {% block extra_reference %}
+
+
+        {% endblock %}

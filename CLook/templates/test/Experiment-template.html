@@ -87,30 +87,32 @@
                   </tr>
                 </thead>
                 <tbody>
+                {% for row in rawDataUsers %}
                   <tr>
-                    <td>1</td>
-                    <td>Mark</td>
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.username }}</td>
                     <!-- <td>
                       <a>link</a>
                     </td> -->
-                    <td>@mdo</td>
+                    <td>{{ row.infomation }}</td>
                   </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Jacob</td>
-                    <!-- <td>
-                      <a>link</a>
-                    </td> -->
-                    <td>@fat</td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Larry</td>
-                    <!-- <td>
-                      <a>link</a>
-                    </td> -->
-                    <td>@twitter</td>
-                  </tr>
+                {% endfor %}
+{#                  <tr>#}
+{#                    <td>2</td>#}
+{#                    <td>Jacob</td>#}
+{#                    <!-- <td>#}
+{#                      <a>link</a>#}
+{#                    </td> -->#}
+{#                    <td>@fat</td>#}
+{#                  </tr>#}
+{#                  <tr>#}
+{#                    <td>3</td>#}
+{#                    <td>Larry</td>#}
+{#                    <!-- <td>#}
+{#                      <a>link</a>#}
+{#                    </td> -->#}
+{#                    <td>@twitter</td>#}
+{#                  </tr>#}
                 </tbody>
               </table>
             </div>

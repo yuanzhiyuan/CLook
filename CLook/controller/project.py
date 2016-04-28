@@ -3,6 +3,7 @@ from flask import request,render_template,abort
 import CLook.model.projects as db_projects
 import CLook.model.files as db_files
 import CLook.model.relation as db_relation
+import CLook.model.user as db_user
 @app.route('/addProject',methods=['GET','POST'])
 def addProject():
     if request.method=='GET':
@@ -35,14 +36,22 @@ def exp(id=0):
         if not rawDatas:
             rawDatas = []
 # dataUsersRows = db_files.Files().getRawDataUsersByProjectid(projectid)
-        rawDataUsers = db_files.Files().getRawDataUsersByProjectid(id)
-        id_thisProjectFileObj_map = {}
-        for row in rawDataUsers:
-            id_thisProjectFileObj_map[int(row.id)] = []
-            id_thisProjectFileObj_map[int(row.id)].append(row.location)
-            id_thisProjectFileObj_map[int(row.id)].append(row.name)
+        rawDataUserids = [i.author for i in db_files.Files().getRawDataUsersByProjectid(id)]
+        rawDataUserids = list(set(rawDataUserids))
 
-        return render_template('test/Experiment-template.html',files=id_thisProjectFileObj_map,projectid=id,projectInfomationName=projectInfomationName,rawDatas=rawDatas)
+        rawDataUsers = db_user.User().getUserByIdList(rawDataUserids)
+        # id_thisProjectFileObj_map = {}
+        # for row in rawDataUsers:
+        #     id_thisProjectFileObj_map[int(row.id)] = []
+        #     id_thisProjectFileObj_map[int(row.id)].append(row.location)
+        #     id_thisProjectFileObj_map[int(row.id)].append(row.name)
+        #
+        # print id_thisProjectFileObj_map
+
+
+
+        # return render_template('test/Experiment-template.html',files=id_thisProjectFileObj_map,projectid=id,projectInfomationName=projectInfomationName,rawDatas=rawDatas)
+        return render_template('test/Experiment-template.html',rawDataUsers = rawDataUsers,projectid=id,projectInfomationName=projectInfomationName,rawDatas=rawDatas)
 
 @app.route('/exp/<int:projectid>/getTree',methods=['GET','POST'])
 def getFullTree(projectid):
@@ -52,8 +61,15 @@ def getFullTree(projectid):
         id_thisProjectFileObj_map = {}
         for row in dataUsersRows:
             id_thisProjectFileObj_map[str(row.id)] = []
-            id_thisProjectFileObj_map[str(row.id)].append(row.location.encode('utf8'))
-            id_thisProjectFileObj_map[str(row.id)].append(row.name.encode('utf8'))
+            # print row.location
+            # print row.name
+            row_location,row_name='None','None'
+            if row.location!=None:
+                row_location =row.location.encode('utf8')
+            if row.name!=None:
+                row_name = row.name.encode('utf8')
+            id_thisProjectFileObj_map[str(row.id)].append(row_location)
+            id_thisProjectFileObj_map[str(row.id)].append(row_name)
         # maybe duplicate
 
         if len(dataUsersRows)==0:

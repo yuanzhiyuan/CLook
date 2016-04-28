@@ -17,6 +17,17 @@
     queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file://
     -->
+<script src="/static/js/jquery.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/js/bootstrap.min.js"></script>
+    <!-- Morris Charts JavaScript -->
+    <script src="/static/js/plugins/morris/raphael.min.js"></script>
+    <!-- // <script src="js/plugins/morris/morris.min.js"></script> -->
+    <!-- // <script src="js/plugins/morris/morris-data.js"></script> -->
+
+    <script src="/static/js/my/my.js"></script>
+    <script src="/static/js/my/post_data.js"></script>
+
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -155,26 +166,37 @@
             <li>
               <a href="/upload"><i class="fa fa-fw fa-edit"></i> Upload </a>
             </li>
+{#            <li>#}
+{#              <a href="/user/add"><i class="fa fa-fw fa-desktop"></i> Manage User</a>#}
+{#            </li>#}
+{#            <li>#}
+{#              <a href="/user/changepwd"><i class="fa fa-fw fa-wrench"></i> Manage Infomation</a>#}
+{#            </li>#}
             <li>
-              <a href="bootstrap-elements.html"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
-            </li>
-            <li>
-              <a href="bootstrap-grid.html"><i class="fa fa-fw fa-wrench"></i> Bootstrap Grid</a>
-            </li>
-            <li>
-              <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Dropdown <i class="fa fa-fw fa-caret-down"></i></a>
-              <ul id="demo" class="collapse">
+              <a href="javascript:;" data-toggle="collapse" data-target="#personal_infomation"><i class="fa fa-fw fa-arrows-v"></i> Personal Infomation <i class="fa fa-fw fa-caret-down"></i></a>
+              <ul id="personal_infomation" class="collapse">
                 <li>
-                  <a href="#">Dropdown Item</a>
+                  <a href="/user/changepwd"> Manage Infomation</a>
                 </li>
                 <li>
-                  <a href="#">Dropdown Item</a>
+                  <a href="/user/listfiles">Manage Files</a>
                 </li>
               </ul>
             </li>
-            <li>
-              <a href="blank-page.html"><i class="fa fa-fw fa-file"></i> Blank Page</a>
+              <li>
+              <a href="javascript:;" data-toggle="collapse" data-target="#user_management"><i class="fa fa-fw fa-arrows-v"></i> User Management <i class="fa fa-fw fa-caret-down"></i></a>
+              <ul id="user_management" class="collapse">
+                <li>
+                  <a href="/user/add"> Add User</a>
+                </li>
+                <li>
+                  <a href="/user/list">List Users</a>
+                </li>
+              </ul>
             </li>
+{#            <li>#}
+{#              <a href="/user/listfiles"><i class="fa fa-fw fa-file"></i> Manage Files</a>#}
+{#            </li>#}
             <li>
               <a href="index-rtl.html"><i class="fa fa-fw fa-dashboard"></i> RTL Dashboard</a>
             </li>
@@ -194,17 +216,17 @@
     </div>
     <!-- /#wrapper -->
     <!-- jQuery -->
-    <script src="/static/js/jquery.js"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="/static/js/bootstrap.min.js"></script>
-    <!-- Morris Charts JavaScript -->
-    <script src="/static/js/plugins/morris/raphael.min.js"></script>
-    <!-- // <script src="js/plugins/morris/morris.min.js"></script> -->
-    <!-- // <script src="js/plugins/morris/morris-data.js"></script> -->
-    
-    <script src="/static/js/my/my.js">
+{#    <script src="/static/js/jquery.js"></script>#}
+{#    <!-- Bootstrap Core JavaScript -->#}
+{#    <script src="/static/js/bootstrap.min.js"></script>#}
+{#    <!-- Morris Charts JavaScript -->#}
+{#    <script src="/static/js/plugins/morris/raphael.min.js"></script>#}
+{#    <!-- // <script src="js/plugins/morris/morris.min.js"></script> -->#}
+{#    <!-- // <script src="js/plugins/morris/morris-data.js"></script> -->#}
+{#    #}
+{#    <script src="/static/js/my/my.js">#}
 
-    </script>
+{#    </script>#}
     {% block scripts %}
     {% endblock %}
   

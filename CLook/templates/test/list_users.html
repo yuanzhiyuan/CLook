@@ -1,0 +1,51 @@
+{% extends 'test/base.html' %}
+
+
+{% block content %}
+
+<div class="row">
+    <div class="section">
+      <div class="col-lg-12">
+        <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>Username</th>
+                      <th>Last Ip</th>
+                      <th>Last Time</th>
+
+                      <th>Infomation</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for row in users_obj %}
+                    <tr>
+                      <td>{{ row.id }}</td>
+                      <td>{{ row.username }}</td>
+                      <td>{{ row.lastip }}</td>
+                      <td>{{ row.lasttime | timeformat('%Y-%m-%d %H:%M')}}</td>
+                      <td>{{ row.infomation }}</td>
+{#                      <td>{{ row.date | timeformat('%Y-%m-%d %H:%M') }}</td>#}
+
+                    </tr>
+                  {% endfor %}
+
+                  </tbody>
+                </table>
+      </div>
+    </div>
+</div>
+
+
+
+
+
+
+{% endblock %}
+
+
+        {% block extra_reference %}
+
+
+        {% endblock %}

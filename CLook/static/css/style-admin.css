@@ -1,0 +1,558 @@
+/******* common style ******/
+
+#erji{
+    display: none;
+}
+
+body,#login_page{
+	width:1366px;
+	min-height:768px;
+	margin:0 auto;
+	font:12px/22px 'Microsoft Yahei',Arial,Lucida Grande,Tahoma,sans-serif;
+}
+.fenye{
+    position: relative;
+    left:-500px;
+}
+a {
+	text-decoration: none;
+	cursor: pointer;
+}
+.list_no_padding_left ul {
+	list-style: none;
+	padding-left: 0;
+}
+table tr:hover {
+	background:#eee;
+}
+input {
+	padding:6px 12px;
+}
+button {
+	cursor: pointer;
+}
+/******** admin login style start ********/
+#login_page {
+	background-color: #f8f8f8;
+}
+#login_container {
+	width:360px;
+	height:240px;
+	margin-left:auto;
+	margin-right:auto;
+	padding-top: 150px;
+}
+#login_title{
+	width:360px;
+	height:40px;
+	font-size: 16px;
+	background-color: #f5f5f5;
+	border-color: #ddd;
+	border-top-left-radius: 3px;
+	border-top-right-radius: 3px;
+	border: 1px solid #ccc;
+	text-align: center;
+	line-height:40px;
+}
+#login_content {
+	width:360px;
+	height:200px;
+	border-bottom-left-radius: 3px;
+	border-bottom-right-radius: 3px;
+	border: 1px solid #ccc;
+	border-top: 0;
+	padding-top:10px;
+}
+.login_row {
+	width:328px;
+	margin:0 auto;
+	padding-top:15px;
+
+}
+.login_row input {
+	width:306px;
+	height:22px;
+	font-size: 14px;
+	line-height: 22px;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+.login_row button{
+	width:328px;
+	height:45px;
+	border: 1px solid #ccc;
+	font-size: 18px;
+	color:#fff;
+	line-height: 45px;
+	border-radius: 6px;
+	background-color: #5cb85c;
+	border-color: #4cae4c;
+	margin-top: 5px;
+}
+.login_row button:hover{
+	background-color: #47a447;
+	border-color: #398439;
+}
+/******** admin login style end ********/
+/******** admin sidebar style start ********/
+#sidebar {
+	width:200px;
+	text-shadow: 0 1px rgba(255, 255, 255, 0.3);
+	letter-spacing: 1px;
+	border-right: 2px solid #e8e8e8;
+	float:left;
+}
+#sidebar ul {
+	width:200px;
+	list-style: none;
+	padding:0;
+	margin:0;
+}
+#sidebar ul li{
+	width:200px;
+	cursor:pointer;
+}
+#sidebar ul li a{
+	width:200px;
+}
+.sidebar_list_level1 {
+	width:200px;
+	height:50px;
+	border-top:1px solid #e8e8e8;
+	border-bottom:1px solid #e8e8e8;
+	text-align:center;
+}
+.sidebar_list_level1 a{
+	height:50px;
+	line-height:50px;
+	color:#555;
+	font-size:16px;
+}
+.sidebar_list_level1:hover,.sidebar_list_level2:hover{
+	background:#f7f7f7;
+}
+.sidebar_list_level2 {
+	width:200px;
+	height:40px;
+}
+.sidebar_list_level2 a{
+	height:40px;
+	line-height:40px;
+	color:#1892d1;
+	padding-left:30px;
+	font-size:14px;
+}
+/******** admin sidebar style end ********/
+/******** admin main style start ********/
+
+#main{
+	width:1164px;
+	font-size: 16px;
+	color:#555;
+	float:left;
+}
+#main_page_content {
+	width:1080px;
+	margin:0 auto;
+}
+#main_title {
+	width:1080px;
+	height:51px;
+}
+#main_title h2 {
+	margin-bottom: 30px;
+	font-size: 24px;
+	line-height: 48px;
+	font-weight: bold;
+	border-bottom: 3px solid #fbb74e;
+}
+/******** admin main style end ********/
+/******** admin usingInfo style start ********/
+.usingInfo_row {
+	width:1080px;
+	float:left;
+}
+.usingInfo_row_title {
+	width:1080px;
+	height:33px;
+	margin:10px 0;
+	float:left;
+}
+.usingInfo_row_title a {
+	height:33px;
+	line-height:33px;
+	font-size:16px;
+	padding:6px;
+	color:#fff;
+	background: #aeb2b5;
+	border-radius: 5px;
+}
+.usingInfo_row_body {
+	width:1050px;
+	padding-bottom: 10px;
+	border-bottom:1px dashed #ccc;
+	float:left;
+}
+.usingInfo_row_body ul {
+	margin:0;
+}
+/******** admin usingInfo style end ********/
+
+/******** admin manageUser style start ********/
+
+#user_manage,#article_manage {
+	width:1080px;
+	margin-top:50px;
+	border-radius:3px;
+	font-size:12px;
+	border: 1px solid #ddd;
+}
+#user_manage tr th {
+	width:235px;
+	height:28px;
+	line-height:28px;
+	padding:2px;
+	border-top: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+#user_manage tr td {
+	width:235px;
+	height:34px;
+	padding:2px;
+	line-height:34px;
+	text-align:center;
+	border-top: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+#user_manage tr td button {
+	width:80px;
+	height:30px;
+	margin-top:4px;
+	border: 1px solid #ccc;
+	color:#fff;
+	line-height: 30px;
+	border-radius: 3px;
+	background-color: #2F95CE;
+	border-color: #2F95CE;
+}
+#user_manage tr td button:hover {
+	background-color: #2762BB;
+	border-color: #2762BB;
+}
+/******** admin manageUser style end ********/
+/******** admin addUser style start ********/
+#addUser,#addArticle {
+	width:1080px;
+	padding-top:10px;
+}
+.addUser_row,.addArticle_row {
+	width:1080px;
+	height:34px;
+	margin:15px 0;
+}
+.addUser_leftRow {
+	width:200px;
+	font-size: 14px;
+	height:34px;
+	line-height:34px;
+	margin-right: 30px;
+	text-align: right;
+	font-weight: bold;
+	float:left;
+}
+
+.addUser_rightRow {
+	width:500px;
+	height:34px;
+	line-height:34px;
+	float:left;
+}
+.addUser_rightRow input {
+	width:324px;
+	height:18px;
+	font-size: 12px;
+	line-height: 18px;
+	color: #555;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+
+.addUser_rightRow button{
+	width:334px;
+	height:34px;
+	border: 1px solid #ccc;
+	font-size: 18px;
+	color:#fff;
+	line-height: 34px;
+	border-radius: 3px;
+	background-color: #2F95CE;
+	border-color: #2F95CE;
+	margin-top: 5px;
+}
+.addUser_rightRow button:hover{
+	background-color: #2762BB;
+	border-color: #2762BB;
+
+}
+/******** admin addUser style end ********/
+/******** admin addArticle style start ********/
+.addArticle_row input{
+	width:756px;
+	height:28px;
+	font-size: 12px;
+	line-height: 18px;
+	color: #555;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
+.addArticle_row button{
+	width:200px;
+	height:34px;
+	font-size: 16px;
+	line-height: 34px;
+	color: #fff;
+	background-color: #2F95CE;
+	border: 1px solid #2F95CE;
+	border-radius: 4px;
+}
+.addArticle_row button:hover{
+	background-color: #2762BB;
+	border: 1px solid #2762BB;
+}
+#type-choose {
+	width:1080px;
+	height:40px;
+}
+#type-choose button{
+	width:100px;
+	height:28px;
+	margin-top:10px;
+	margin-right:5px;
+	border: 1px solid #ddd;
+	font-size: 16px;
+	font-weight:bold;
+	line-height: 28px;
+	border-radius: 3px;
+	color:#666;
+	background:#eee;
+}
+#type-choose button:hover{
+	background-color: #2F95CE;
+	border-color: #2F95CE;
+	color:#fff;
+}
+
+.active{
+	background-color: #2F95CE;
+	border-color: #2F95CE;
+	color:#fff;
+}
+
+#child-type-choose button{
+	width:72px;
+	height:28px;
+	margin-top:10px;
+	margin-right:5px;
+	border: 1px solid #ddd;
+	font-size: 12px;
+	color:#555;
+	line-height: 28px;
+	border-radius: 3px;
+	background:#cdcdcd;
+}
+#child-type-choose button:hover{
+	background-color: #2F95CE;
+	border-color: #2F95CE;
+	color:#fff;
+}
+/******** admin addArticle style end ********/
+/******** admin manageArticle style start ********/
+#article_manage_table {
+	width:1080px;
+
+	overflow-y: hidden;
+	overflow-x: auto;
+	font-size:12px;
+}
+#article_manage tr th {
+	min-width:50px;
+	line-height:28px;
+	padding:2px;
+	border-top: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+#article_manage tr td {
+	min-width:50px;
+	height:34px;
+	padding:2px;
+	border-top: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	text-align: center;
+}
+#article_manage tr td a {
+	color:#2F95CE;
+}
+#article_manage tr td button {
+	width:80px;
+	height:30px;
+	line-height:30px;
+	border: 1px solid #ccc;
+	color:#fff;
+	border-radius: 3px;
+	background-color: #2F95CE;
+	border-color: #2F95CE;
+	margin-top: 5px;
+}
+#article_manage tr td button:hover {
+	background-color: #2762BB;
+	border-color: #2762BB;
+}
+/* manage article column width config style */
+.articleTable_id{
+	width:50px;
+}
+.articleTable_title{
+	min-width:200px;
+    width: 100px;
+}
+.articleTable_author{
+	width:50px;
+}
+.articleTable_publisher{
+	width:50px;
+}
+.articleTable_editor{
+	width:50px;
+}
+.articleTable_category{
+	width:25px;
+}
+.articleTable_updateTime{
+	width:83px;
+}
+.articleTable_state{
+	width:25px;
+}
+.articleTable_delete{
+	width:50px;
+}
+.articleTable_update{
+	width:50px;
+}
+.articleTable_delete{
+	width:50px;
+}
+/******** admin manageArticle style end ********/
+/******** admin addBlock style start ********/
+/* using addUser style for addBlock*/
+#addBlock {
+	width:1080px;
+	padding-top:100px;
+}
+.addUser_rightRow select{
+	height:24px;
+	margin:5px auto;
+}
+.addBlock_rightRow {
+	width:840px;
+	height:34px;
+	line-height:34px;
+	float:left;
+}
+.addBlock_rightRow button{
+	width:100px;
+	height:34px;
+	line-height:34px;
+	border: 1px solid #ccc;
+	font-size: 18px;
+	color:#666;
+	border-radius: 3px;
+	background-color: #eee;
+	border-color: #ddd;
+	margin-top: 5px;
+}
+.addBlock_rightRow button:hover{
+	background-color: #2762BB;
+	border-color: #2762BB;
+	color:#fff;
+}
+/******** admin addBlock style end ********/
+/******** admin manageBlock style start ********/
+.block_manage_item {
+	width:175px;
+}
+.block_manage_item button{
+	width:50px;
+	color: #fff;
+	background-color: #2F95CE;
+	border: 1px solid #2F95CE;
+	border-radius: 4px;
+}
+.block_manage_item button:hover{
+	background-color: #2762BB;
+	border: 1px solid #2762BB;
+}
+/******** admin manageBlock style end ********/
+/** pagination start **/
+.pagination-container{
+   width: 750px;
+   height: 50px;
+   padding-top: 18px;
+}
+
+.pagination-box{
+    float: right;
+}
+.pagination-box .info{
+    margin-right: 20px;
+    height: 34px;
+    line-height: 34px;
+    float: left;
+    display: inline-block;
+    font-size: 14px;
+    color:#999;
+}
+.pagination-box .pagination{
+    margin: 0;
+}
+
+.pagination{
+    display: inline-block;
+    padding-left: 0;
+    border-radius: 4px;
+}
+
+.pagination li{
+    float: left;
+}
+
+.pagination>li:first-child>a, .pagination>li:first-child>span {
+    margin-left: 0;
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+}
+
+.pagination>.disabled>span, .pagination>.disabled>span:hover, .pagination>.disabled>span:focus, .pagination>.disabled>a, .pagination>.disabled>a:hover, .pagination>.disabled>a:focus {
+    color: #999;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ddd;
+}
+
+.pagination>li>a, .pagination>li>span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.428571429;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+/** pagination end **/

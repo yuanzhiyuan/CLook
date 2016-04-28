@@ -15,6 +15,15 @@ class Files(Base):
     date = Column(Integer)
     comments = Column(Text)
 
+
+
+    def getFilesByUserid(self,userid):
+        selectedRows = session.query(Files).filter(Files.author==int(userid)).all()
+        if not selectedRows:
+            return []
+        else:
+            return selectedRows
+
     def addFile(self,name,location,project,type,file_type,author,infomation):
         filesObj = Files(name=name,location=location,project=int(project),type=int(type),file_type=file_type,author=int(author),comments=infomation,date=int(time.time()))
         if filesObj:

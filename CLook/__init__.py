@@ -29,6 +29,7 @@ import CLook.controller.file
 import CLook.controller.project
 import CLook.controller.upload
 import CLook.controller.tools
+import CLook.controller.user
 
 # import CLook.controller.user
 # import CLook.controller.article

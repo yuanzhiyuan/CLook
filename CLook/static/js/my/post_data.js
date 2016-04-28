@@ -199,3 +199,124 @@ $(document).ready(function(){
     });
 
 });
+
+
+
+
+function login(){
+//    alert('???')
+//    记得写val()
+    var username=$('#username').val()
+    var password=$('#password').val()
+    if(username==""){
+        alert('请填写用户名')
+        return false
+    }
+    if(password==""){
+        alert('请填写密码')
+        return false
+    }
+    $.post('/login',
+        {
+            username:username,
+            password:password
+        },
+        function(data,status){
+
+            if(data=='success'){
+                alert('登录成功！')
+                location.href='/'
+            }
+            else if(data=='error1'){
+                alert('用户名/密码错误')
+                location.reload()
+            }
+            else if(data=='error2'){
+                alert('请输入密码')
+                location.reload()
+            }
+            else if(data=='error4'){
+                alert('系统错误')
+                location.reload()
+            }
+
+
+        })
+}
+
+
+function addUser(){
+    var username=$('#username').val()
+    var password=$('#password').val()
+    var repassword=$('#repassword').val()
+    if(username==''){
+        alert('请输入用户名')
+        return false
+    }
+    if(password==''){
+        alert('请输入新密码')
+        return false
+    }
+    if(repassword==''){
+        alert('请确认密码')
+        return false
+    }
+    if(password!=repassword){
+        alert('两次密码不一致')
+        return false
+    }
+
+    $.post('/user/add',
+        {
+            username:username,
+            password:password,
+            repassword:repassword
+        },
+        function(data,status){
+            if(data=='success'){
+                alert('添加成功！')
+                location.reload()
+            }
+            else{
+                alert(data)
+                location.reload()
+            }
+        })
+
+}
+
+
+function changePassword(){
+    var oldpassword=$('#oldpassword').val()
+    var newpassword=$('#newpassword').val()
+    var renewpassword=$('#renewpassword').val()
+
+    if(oldpassword==''){
+        alert('请输入旧密码')
+        return false
+    }
+    if(newpassword==''){
+        alert('请输入新密码')
+        return false
+    }
+    if(renewpassword==''){
+        alert('请确认密码')
+        return false
+    }
+    $.post('/user/changepwd',
+        {
+            oldpassword:oldpassword,
+            newpassword:newpassword,
+            renewpassword:renewpassword
+        },
+        function (data,status) {
+            if(data=='success'){
+                alert('修改成功')
+                location.href='/login'
+            }else{
+                alert(data)
+                location.reload()
+            }
+
+    })
+}
